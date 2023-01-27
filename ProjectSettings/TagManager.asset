@@ -3,7 +3,15 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - LeftJoyStick
+  - RightJoyStick
+  - LevelGoal
+  - Waypoint
+  - LeftHand
+  - RightHand
+  - Gun
+  - GunPivot
   layers:
   - Default
   - TransparentFX

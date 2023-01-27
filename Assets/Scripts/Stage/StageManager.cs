@@ -17,7 +17,7 @@ public class StageManager : MonoBehaviour
             spawns[0].position, Quaternion.identity);
         mainCam = Camera.main;
         myCharactor.AddComponent<PlayerInput>();
-        myCharactor.AddComponent<PlayerController>();
+        myCharactor.AddComponent<PlayerController>().enabled = true;
 
     }
     void Start()
