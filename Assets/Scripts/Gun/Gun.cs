@@ -18,28 +18,32 @@ public class Gun : MonoBehaviour
     public delegate void PlayerAnimation();
     public PlayerAnimation SingleFireAnimation;
 
-    private void Awake()
+    public PlayerInput playerInput;
+    public Animator playerAnimator;
+
+    private void Start()
     {
+        playerInput = gameObject.GetComponentInParent<PlayerInput>();
+        playerAnimator = playerInput.transform.GetComponent<Animator>();    
     }
     private void Update()
     {
         fireTimer += Time.deltaTime;
-    }
-    public void FireStart()
-    {
-
+        if (playerInput.shot_joystick.isDown)
+            Fire();
     }
     public void Fire() //일정시간마다 애니메이션 반복
     {
         if (fireTimer > shotDelay)
         {
             fireTimer = 0f;
-            SingleFireAnimation();
+            playerAnimator.SetTrigger("FireSingle");
+            Debug.Log(Time.time);
         }
     }
     public void FireBullet()
     {
-        Debug.Log("Test");
+        Debug.Log("Test: " + Time.time);
         Instantiate(fireParticle, pivot.position, Quaternion.identity);
     }
 }

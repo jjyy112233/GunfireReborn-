@@ -1,13 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
     public Transform[] spawns;
     public GameObject[] preCharactors;
     GameObject myCharactor;
+
+    public Button Reload;
+    public Button Skil;
+    public Button Jump;
+    public Button Rolling;
+    public Button throwAttack;
+    public Joystick leftJoystick;
+    public Joystick rightJoystick;
 
     Camera mainCam;
 

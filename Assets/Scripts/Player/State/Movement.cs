@@ -1,7 +1,6 @@
 #define Debug
-using DungeonArchitect.Editors;
-using System.Collections;
-using System.Collections.Generic;
+
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class Movement : ObjectAction 
@@ -15,6 +14,7 @@ public class Movement : ObjectAction
     PlayerInput playerInput;
     Rigidbody playerRigidBody;
     Animator playerAnimator;
+    SphereCollider rollingCol;
 
     Camera camera;
     float aimSen = 2f;
@@ -23,13 +23,16 @@ public class Movement : ObjectAction
     float camX = 0f;
     float camY = 0f;
 
+
     public Movement(Transform p)
     {
         player = p;
         playerInput = p.GetComponent<PlayerInput>();
         playerRigidBody = p.GetComponent<Rigidbody>();
         playerAnimator = p.GetComponent<Animator>();
+        rollingCol = player.GetComponent<SphereCollider>();
         camera = Camera.main;
+
 
         playerAnimator.SetTrigger("Stage");
     }
@@ -37,6 +40,7 @@ public class Movement : ObjectAction
 
     public void Rolling()
     {
+        rollingCol.enabled = true;
         var hor = Mathf.Abs(playerInput.move_joystick.Horizontal);
         var ver = Mathf.Abs(playerInput.move_joystick.Vertical);
 
@@ -51,7 +55,13 @@ public class Movement : ObjectAction
         playerAnimator.SetFloat("Vertical", ver);
         playerAnimator.SetFloat("Horizontal", hor);
         playerAnimator.SetTrigger("Dash");
+
         return;
+    }
+
+    public void RollingEnd()
+    {
+        rollingCol.enabled = false;
     }
 
     void Move()
@@ -85,6 +95,9 @@ public class Movement : ObjectAction
 
     void LookJoystick()
     {
+        if (!playerInput.shot_joystick.isDown)
+            return;
+
         var ver = playerInput.shot_joystick.Vertical;
         var hor = playerInput.shot_joystick.Horizontal;
 
@@ -94,6 +107,8 @@ public class Movement : ObjectAction
         camY += hor;
 
         camera.transform.localRotation = Quaternion.Euler(-camX, 0, 0);
+        playerAnimator.SetFloat("CamX", camX/90);
+
         player.transform.rotation = Quaternion.Euler(0, camY, 0);
 
         if (camY > 360)
@@ -110,16 +125,6 @@ public class Movement : ObjectAction
 
         if (isJump)
             playerAnimator.SetFloat("JumpVelocity", playerRigidBody.velocity.y);
-
-        if (Input.GetKeyDown(KeyCode.Space)) //PlayerController 에서 Button으로 대체
-        {
-            Rolling();
-        }
-
-        if(Input.GetKeyDown(KeyCode.LeftAlt))//Button으로 대체
-        {
-            Jump();
-        }
     }
 
     public void Jump()
@@ -137,4 +142,9 @@ public class Movement : ObjectAction
         isJump = false;
     }
 
+    public void Reload()
+    {
+        Debug.Log("Reload");
+        playerAnimator.SetTrigger("Reload");
+    }
 }

@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro.EditorUtilities;
-using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -22,10 +19,11 @@ public class PlayerController : MonoBehaviour
 
     delegate void ActionDelegate();
 
-    ActionDelegate DJump;
+    // 나중에 밑에 있는 함수 다 삭제하고 movement에 있는 함수를 버튼에 연결하자.
     ActionDelegate DJumpEnd;
-    ActionDelegate DRolling;
+    ActionDelegate DRollingEnd;
 
+    StageManager stageManager;
     STATE State {
         set {
             switch(value)
@@ -45,6 +43,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
     Dictionary<STATE, ObjectAction> allStates = new Dictionary<STATE, ObjectAction>();
 
     private void Awake()
@@ -55,39 +54,30 @@ public class PlayerController : MonoBehaviour
         allStates[STATE.Die] = new Die(transform);
 
         currentAction = allStates[STATE.Move];
-        DJump = movement.Jump;
         DJumpEnd = movement.JumpEnd;
-        DRolling = movement.Rolling;
-        FindGun();
+        DRollingEnd = movement.RollingEnd;
 
+        stageManager = GameObject.FindObjectOfType<StageManager>();
+        stageManager.Reload.onClick.AddListener(movement.Reload);
+        stageManager.Jump.onClick.AddListener(movement.Jump);
+        stageManager.Rolling.onClick.AddListener(movement.Rolling);
+
+        FindGun();
     }
 
     private void Update()
     {
         currentAction.Update();
-
-        if(Input.GetMouseButton(0))
-        {
-            Fire();
-        }
     }
+
     public void JumpEnd() //Animaton Event
     {
-        if(currentState == STATE.Move)
-        {
-            DJumpEnd();
-        }
+        DJumpEnd();
     }
-    public void Jump()
+    public void RollingEnd()
     {
-        DJump();
+        DRollingEnd();
     }
-
-    public void Rolling()
-    {
-        DRolling();
-    }
-
     public void Fire() //사격 애니메이션
     {
         gun.Fire();
@@ -95,6 +85,11 @@ public class PlayerController : MonoBehaviour
     public void FireBullet() //애니메이션에서 불러오는 함수. 총알 생성
     {
         gun.FireBullet();
+    }
+
+    public void ReloadEnd()
+    {
+        Debug.Log("ReloadEnd");
     }
 
     void FindGun()
@@ -106,7 +101,6 @@ public class PlayerController : MonoBehaviour
             if(gun.gameObject.activeSelf)
             {
                 this.gun = gun;
-                gun.SingleFireAnimation = delegate { transform.GetComponent<Animator>().SetTrigger("FireSingle"); };
                 break;
             }
         }
