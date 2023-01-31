@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 4462282213289050807}
   m_Layer: 0
   m_Name: BasicMaleDefault
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

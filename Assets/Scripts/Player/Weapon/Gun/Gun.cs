@@ -15,11 +15,13 @@ public class Gun : MonoBehaviour
     public delegate void PlayerAnimation();
     public PlayerAnimation SingleFireAnimation;
 
+    public PlayerController player;
     public PlayerInput playerInput;
     public Animator playerAnimator;
 
     private void Start()
     {
+        player = gameObject.GetComponentInParent<PlayerController>();
         playerInput = gameObject.GetComponentInParent<PlayerInput>();
         playerAnimator = playerInput.transform.GetComponent<Animator>();    
     }
@@ -46,9 +48,13 @@ public class Gun : MonoBehaviour
                 forward.y = 0;
                 forward.Normalize();
 
-                Debug.Log(hit.collider.name);
+                var enemy = hit.transform.GetComponent<Enemy>();
+                if (enemy != null)
+                {
+                    enemy.Hit(player, true);
+                    Debug.Log(hit.collider.name);
+                }
             }
-            Debug.DrawRay(ray.origin, ray.direction * 1000, Color.blue);
         }
     }
     public void FireBullet()
