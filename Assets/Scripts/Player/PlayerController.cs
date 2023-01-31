@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     public Transform handR;
     public Transform handL;
 
+    HealthObject healthInfo;
+
     public enum STATE
     {
         None = -1,

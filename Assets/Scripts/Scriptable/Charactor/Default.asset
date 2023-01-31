@@ -9,15 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 164ba36cb9a977e4ca8980aa97709f5f, type: 3}
-  m_Name: DefaultGun
+  m_Script: {fileID: 11500000, guid: a144eb64fcc5d3542b8585264668cb4f, type: 3}
+  m_Name: Default
   m_EditorClassIdentifier: 
-  code: GUN000
-  dmg: 30
-  ran: 1000
-  speed: 0
-  delay: 1
-  aim: 10
-  ammo: 10
-  aimPoint: 
-  type: 0
+  maxHp: 100
+  hp: 0
+  hpCnt: 1
+  defScale: 0
+  maxDef: 100
+  def: 0
+  speed: 1

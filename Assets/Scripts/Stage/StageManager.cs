@@ -28,6 +28,6 @@ public class StageManager : MonoBehaviour
     {
         mainCam.transform.parent = myCharactor.transform;
         mainCam.transform.rotation = myCharactor.transform.rotation;
-        mainCam.transform.localPosition = new Vector3(0, 1, 1);
+        mainCam.transform.localPosition = new Vector3(0, 1.1f, 0);
     }
 }

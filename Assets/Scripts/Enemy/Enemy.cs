@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro.EditorUtilities;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -14,9 +15,14 @@ public class Enemy : MonoBehaviour, EnemyInterface
     Animator animator;
     PlayerController target;
 
+    public HealthObject healthInfo;
+
     public float findDis;
     public float attackDis;
-    public float attack2_Dis;
+    public float skillDelay;
+    public float skillTimer;
+    public float skillDis;
+    
 
     public enum EnemyState
     {
@@ -25,7 +31,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
         Move,
         Hit,
         Attack,
-        Attack2,
+        Skill,
         Die,
     }
 
@@ -46,6 +52,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
                     if (target == null)
                         return;
                     pathFinder.isStopped = false;
+                    pathFinder.speed = healthInfo.speed;
                     animator.SetTrigger("Move");
                     nowUpdate = MoveUpdate;
                     break;
@@ -59,16 +66,18 @@ public class Enemy : MonoBehaviour, EnemyInterface
                     animator.SetTrigger("Attack");
                     nowUpdate = null;
                     break;
-                case EnemyState.Attack2:
-                    pathFinder.isStopped = true;
+                case EnemyState.Skill:
+                    pathFinder.isStopped = false;
+                    pathFinder.speed = 200;
+                    skillTimer = 0f;
                     animator.SetTrigger("Attack2");
                     nowUpdate = null;
                     break;
                 case EnemyState.Die:
                     pathFinder.isStopped = true;
                     animator.SetTrigger("Die");
-                    OnDie();
-                    Destroy(gameObject, 1f);
+                    if(OnDie != null)
+                        OnDie();
                     nowUpdate = DieUpdate;
                     break;
 
@@ -77,8 +86,9 @@ public class Enemy : MonoBehaviour, EnemyInterface
     }
 
     Action nowUpdate;
-    Action OnDie;
 
+    //죽을때 템 드랍
+    Action OnDie;
 
     private void Awake()
     {
@@ -87,16 +97,16 @@ public class Enemy : MonoBehaviour, EnemyInterface
         pathFinder = GetComponent<NavMeshAgent>();
         State = EnemyState.Idle;
         nowUpdate = IdleUpdate;
+
+        healthInfo.SetHpBar(transform.GetComponentInChildren<LookCamera>().hpBar);
+        healthInfo.SetDefBar(transform.GetComponentInChildren<LookCamera>().defBar);
+        healthInfo.Init();
     }
     private void Update()
     {
-        if(nowUpdate != null)
+        skillTimer += Time.deltaTime;
+        if (nowUpdate != null)
             nowUpdate();
-    }
-
-     void Attack()
-    {
-
     }
 
     public void Die()
@@ -110,14 +120,26 @@ public class Enemy : MonoBehaviour, EnemyInterface
         State = EnemyState.Die;
         animator.SetTrigger("Die");
     }
-
-    public void Hit(PlayerController nowTarget, bool stop)
+    public void DieEnd()
     {
+        Destroy(gameObject, 1f);
+    }
+
+    public void Hit(PlayerController nowTarget, float dmg, bool stop)
+    {
+        healthInfo.Hit(dmg);
+        if (healthInfo.isDie)
+        {
+            Die();
+            return;
+        }
+
         State = EnemyState.Hit;
         if (target == null)
         {
             target = nowTarget;
         }
+
     }
 
     public void HitEnd()
@@ -149,20 +171,28 @@ public class Enemy : MonoBehaviour, EnemyInterface
     void MoveUpdate()
     {
         pathFinder.SetDestination(target.transform.position);
-        if(Vector3.Distance(transform.position, target.transform.position) < attackDis)
+        if(skillTimer >= skillDelay && Vector3.Distance(transform.position, target.transform.position) < skillDis)
         {
-            animator.SetTrigger("Attack");
+            State = EnemyState.Skill;
+        }
+        else if(Vector3.Distance(transform.position, target.transform.position) < attackDis)
+        {
             State = EnemyState.Attack;
         }
     }
 
 
-    void EnemyInterface.AttackEnd()
+    public void AttackEnd()
     {
         Targeting();
 
-        if (target != null)
-            State = EnemyState.Idle;
+        if (target == null)
+        {
+            Targeting();
+            if(target == null)
+                State = EnemyState.Idle;
+
+        }
         else
             State = EnemyState.Move;
     }

@@ -51,7 +51,7 @@ public class Gun : MonoBehaviour
                 var enemy = hit.transform.GetComponent<Enemy>();
                 if (enemy != null)
                 {
-                    enemy.Hit(player, true);
+                    enemy.Hit(player, data.dmg, true);
                     Debug.Log(hit.collider.name);
                 }
             }
