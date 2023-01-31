@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 164ba36cb9a977e4ca8980aa97709f5f, type: 3}
+  m_Name: DefaultGun
+  m_EditorClassIdentifier: 
+  code: GUN000
+  dmg: 10
+  ran: 1000
+  speed: 0
+  delay: 1
+  aim: 10
+  ammo: 10
+  aimPoint: 
+  type: 0

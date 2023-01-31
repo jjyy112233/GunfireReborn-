@@ -22,8 +22,6 @@ public class StageManager : MonoBehaviour
         myCharactor = Instantiate(preCharactors[GameManager.instance.charactorIdx],
             spawns[0].position, Quaternion.identity);
         mainCam = Camera.main;
-        myCharactor.AddComponent<PlayerInput>();
-        myCharactor.AddComponent<PlayerController>().enabled = true;
 
     }
     void Start()

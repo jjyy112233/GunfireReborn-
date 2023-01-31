@@ -12,6 +12,7 @@ TagManager:
   - RightHand
   - Gun
   - GunPivot
+  - EnemyHead
   layers:
   - Default
   - TransparentFX
