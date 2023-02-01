@@ -18,6 +18,7 @@ MonoBehaviour:
   speed: 0
   delay: 1
   aim: 10
-  ammo: 10
+  reloadAmmo: 10
+  useAmmo: 1
   aimPoint: 
-  type: 0
+  type: 1

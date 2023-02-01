@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ObjectAction
 {
-    public abstract void Update();
+    public abstract void MoveUpdate();
 }

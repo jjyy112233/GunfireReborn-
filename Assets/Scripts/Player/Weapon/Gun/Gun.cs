@@ -7,25 +7,36 @@ public class Gun : MonoBehaviour
 {
     public Transform pivot;
     public GameObject fireParticle;
+    public WeaponButton weaponButton;
 
-    //스크립터블로 만들기
-    public float fireTimer = 0;
+    float fireTimer = 0;
     public WeaponData data;
 
-    public delegate void PlayerAnimation();
-    public PlayerAnimation SingleFireAnimation;
-
-    public PlayerController player;
-    public PlayerInput playerInput;
-    public Animator playerAnimator;
+    PlayerController player;
+    PlayerInput playerInput;
+    Animator playerAnimator;
+    WeaponManager weaponManager;
 
     public LayerMask layer;
-
+    [SerializeField]
+    int ammo;
+    int Ammo {
+        get { return ammo; }
+        set {
+            ammo = value;
+            weaponManager.SetAmmo(ammo);
+        }
+    }
+    private void Awake()
+    {
+        weaponManager = FindObjectOfType<WeaponManager>();
+    }
     private void Start()
     {
         player = gameObject.GetComponentInParent<PlayerController>();
         playerInput = gameObject.GetComponentInParent<PlayerInput>();
-        playerAnimator = playerInput.transform.GetComponent<Animator>();    
+        playerAnimator = playerInput.transform.GetComponent<Animator>();
+        Ammo = data.reloadAmmo;
     }
     private void Update()
     {
@@ -35,6 +46,8 @@ public class Gun : MonoBehaviour
     }
     public void Fire() //일정시간마다 애니메이션 반복
     {
+        if (Ammo == 0)
+            return;
         if (fireTimer > data.delay)
         {
             fireTimer = 0f;
@@ -63,5 +76,13 @@ public class Gun : MonoBehaviour
     {
         //Debug.Log("Test: " + Time.time);
         Instantiate(fireParticle, pivot.position, transform.rotation);
+        Ammo -= data.useAmmo;
+        weaponManager.SetAmmo(Ammo);
+    }
+    public void Reload()
+    {
+        weaponManager.UseMyAmmo(data.type, data.reloadAmmo - Ammo);
+        Ammo = data.reloadAmmo;
+        weaponManager.SetAmmo(Ammo);
     }
 }

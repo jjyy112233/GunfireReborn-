@@ -1,13 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using static WeaponData;
 
 //무기 변경, 획득 등
 public class WeaponManager : MonoBehaviour
 {
-    public GameObject[] weaponPrefabs;
-    Dictionary<string, GameObject> weapons = new Dictionary<string, GameObject>();
+    public Gun[] weaponPrefabs;
+    Dictionary<string, Gun> weapons = new Dictionary<string, Gun>();
+
+    public WeaponButton[] weaponButtons;
+    public Dictionary<WeaponButton, Gun> connecntWeapon = new Dictionary<WeaponButton, Gun>();
+    public Dictionary<WeaponType, int> allAmmoCount = new Dictionary<WeaponType, int>();
+
     PlayerController player;
+    Gun nowWeapon;
+    string defaultWeapon = "GUN000";
 
     private void Awake()
     {
@@ -19,25 +29,98 @@ public class WeaponManager : MonoBehaviour
     private void Start()
     {
         player = FindObjectOfType<PlayerController>();
+
+        for (var type = WeaponType.Wepon1; type < WeaponType.Count; type++)
+        {
+            allAmmoCount[type] = 100;
+            var TypeWeapon = weaponButtons.Where(t => t.type == type);
+            foreach(var t in TypeWeapon)
+            {
+                t.SetAllAmmo(allAmmoCount[type]);
+            }
+        }
+
+        GetWeapon(defaultWeapon);
     }
 
-    public void ChangeWeapon(string code)
+    public void ChangeWeapon(WeaponButton button)
     {
-        if(player.gun != null)
+        if (string.IsNullOrEmpty(button.code))
+            return;
+        if (player.gun != null)
             player.gun.gameObject.SetActive(false);
-        player.guns[code].gameObject.SetActive(true);
+
+        var nowGun = connecntWeapon[button];
+        player.gun = nowGun;
+        nowGun.gameObject.SetActive(true);
     }
     public void GetWeapon(string code)
     {
-        if (player.gun != null)
+        //비어있는 무기창 탐색
+        var emptyBtns = weaponButtons.Where(t => string.IsNullOrEmpty(t.code)).ToArray();
+        WeaponButton nowWeapon;
+
+        //비어있는 공간이 없을시에
+        if (emptyBtns.Length == 0)
         {
-            Destroy(player.gun.gameObject);
-            player.guns.Remove(player.gun.data.code);
+            WeaponButton deleteGunButton = player.gun.weaponButton.isDefault ?
+                weaponButtons[1] : player.gun.weaponButton;
+
+            nowWeapon = deleteGunButton;
+            player.gun.gameObject.SetActive(false);
+
+            Destroy(connecntWeapon[deleteGunButton].gameObject);
+            connecntWeapon.Remove(deleteGunButton);
         }
+        else
+        {
+            if (player.gun != null)
+                player.gun.gameObject.SetActive(false);
+            nowWeapon = emptyBtns.First();
+        }
+
         player.gun = Instantiate(weapons[code], player.handR).GetComponent<Gun>();
         player.gun.transform.localRotation = Quaternion.Euler(0,90,90);
-        player.guns[code] = player.gun;
+
+        nowWeapon.code = code;
+
+        nowWeapon.type = player.gun.data.type;
+        player.gun.weaponButton = nowWeapon;
+        connecntWeapon[nowWeapon] = player.gun;
     }
+
+    public void Reload()
+    {
+            
+    }
+
+    public void AddAllAmmo(WeaponType weaponType, int allAmmo)
+    {
+        allAmmoCount[weaponType] += allAmmo;
+        var TypeWeapon = weaponButtons.Where(t => t.type == weaponType);
+        foreach (var weapon in TypeWeapon)
+        {
+            weapon.SetAllAmmo(allAmmoCount[weaponType]);
+        }
+    }
+
+    public void UseMyAmmo(WeaponType weaponType, int count)
+    {
+        allAmmoCount[weaponType] -= count;
+
+        var TypeWeapon = weaponButtons.Where(t => t.type == weaponType);
+        foreach (var weapon in TypeWeapon)
+        {
+            weapon.SetAllAmmo(allAmmoCount[weaponType]);
+        }
+    }
+
+    public void SetAmmo(int ammo)
+    {
+        var button = player.gun.weaponButton;
+        button.SetAmmoTxt(ammo, allAmmoCount[player.gun.data.type]);
+    }
+
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.F1))

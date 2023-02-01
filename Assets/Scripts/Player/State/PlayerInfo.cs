@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "HealtPlayer.asset", menuName = "HealthObject/HealthPlayer")]
+[CreateAssetMenu(fileName = "PlayerInfo.asset", menuName = "HealthObject/PlayerInfo")]
 public class PlayerInfo : ScriptableObject
 {
     public float maxHp;

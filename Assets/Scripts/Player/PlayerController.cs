@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     public Gun gun;
-    public Dictionary<string, Gun> guns = new Dictionary<string, Gun>();
     public Transform handR;
     public Transform handL;
 
@@ -75,9 +74,9 @@ public class PlayerController : MonoBehaviour
         FindGun();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        currentAction.Update();
+        currentAction.MoveUpdate();
     }
 
     public void JumpEnd() //Animaton Event
@@ -100,6 +99,7 @@ public class PlayerController : MonoBehaviour
     public void ReloadEnd()
     {
         Debug.Log("ReloadEnd");
+        gun.Reload();
     }
     public void Hit(GameObject attackObj, float damage)
     {

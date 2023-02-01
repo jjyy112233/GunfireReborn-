@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: TEST2
   m_EditorClassIdentifier: 
   code: GUN002
-  dmg: 10
-  ran: 10
-  speed: 10
-  delay: 3
+  dmg: 70
+  ran: 1000
+  speed: 0
+  delay: 5
   aim: 10
-  ammo: 0
+  reloadAmmo: 3
+  useAmmo: 1
   aimPoint: 
-  type: 0
+  type: 3

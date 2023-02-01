@@ -89,7 +89,8 @@ public class Movement : ObjectAction
         }
         var delta = dir * moveSpeed * Time.deltaTime;
 
-        playerRigidBody.MovePosition(playerRigidBody.position + delta);
+        playerRigidBody.AddForce(delta * 2000);
+        //playerRigidBody.MovePosition(playerRigidBody.position + delta);
         playerAnimator.SetFloat("Move", dir.magnitude);
     }
 
@@ -117,7 +118,7 @@ public class Movement : ObjectAction
             camY += 360;
     }
 
-    public void Update()
+    public void MoveUpdate()
     {
         Move();
         LookJoystick();

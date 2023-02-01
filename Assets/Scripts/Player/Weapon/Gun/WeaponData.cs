@@ -1,17 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 [CreateAssetMenu(fileName = "WeaponData.asset", menuName = "WeaponScriptable/WeaponData")]
 public class WeaponData : ScriptableObject
 {
-    public enum WeponType
+    public enum WeaponType
     {
+        None,
         Wepon1,
         Wepon2,
         Wepon3,
-        Wepon4,
-        Wepon5,
+        Count
     }
 
     public string code;
@@ -20,7 +21,10 @@ public class WeaponData : ScriptableObject
     public float speed;
     public float delay;
     public float aim;
-    public int ammo;
+
+    public int reloadAmmo;
+    public int useAmmo;
+
     public string aimPoint;
-    public WeponType type;
+    public WeaponType type;
 }

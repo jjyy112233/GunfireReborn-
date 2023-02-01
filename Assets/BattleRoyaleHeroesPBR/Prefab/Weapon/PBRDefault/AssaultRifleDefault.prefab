@@ -99,10 +99,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pivot: {fileID: 6478472911066326959}
   fireParticle: {fileID: 1336949550903370, guid: 4543ab5e3d405ec40a8d4e9aa5165030, type: 3}
+  weaponButton: {fileID: 0}
   fireTimer: 0
   data: {fileID: 11400000, guid: 86a04f06449bafc4098180a211f83daa, type: 2}
+  player: {fileID: 0}
   playerInput: {fileID: 0}
   playerAnimator: {fileID: 0}
+  layer:
+    serializedVersion: 2
+    m_Bits: 192
 --- !u!1 &8436764205574479616
 GameObject:
   m_ObjectHideFlags: 0
