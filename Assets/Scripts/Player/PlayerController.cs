@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public Transform handR;
     public Transform handL;
 
-    HealthObject healthInfo;
+    public HealthPlayer healthInfo;
 
     public enum STATE
     {
@@ -68,6 +68,10 @@ public class PlayerController : MonoBehaviour
         stageManager.Jump.onClick.AddListener(movement.Jump);
         stageManager.Rolling.onClick.AddListener(movement.Rolling);
 
+        healthInfo.SetHpBar(GameObject.FindGameObjectWithTag("PlayerHP").GetComponent<Image>());
+        healthInfo.SetDefBar(GameObject.FindGameObjectWithTag("PlayerDEF").GetComponent<Image>());
+        healthInfo.Init();
+
         FindGun();
     }
 
@@ -96,6 +100,10 @@ public class PlayerController : MonoBehaviour
     public void ReloadEnd()
     {
         Debug.Log("ReloadEnd");
+    }
+    public void Hit(GameObject attackObj, float damage)
+    {
+        healthInfo.Hit(damage);
     }
 
     void FindGun()

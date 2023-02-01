@@ -1470,17 +1470,7 @@ Animator:
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: '
-
-    Transform ''ball_r'' has been deleted
-
-    Transform ''foot_r''
-    has been deleted
-
-    Transform ''calf_r'' has been deleted
-
-    Transform ''thigh_r''
-    has been deleted'
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -1557,6 +1547,7 @@ MonoBehaviour:
   gun: {fileID: 2689417394724974915}
   handR: {fileID: 6123953096796414174}
   handL: {fileID: 6123953096598591693}
+  healthInfo: {fileID: 11400000, guid: aaa66d2e577ef174f870a40d6b71053b, type: 2}
 --- !u!1 &6123953097802274437
 GameObject:
   m_ObjectHideFlags: 0

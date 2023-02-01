@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface EnemyInterface 
 {
+    //공격
+    public void AttackOnDamage();
     //공격의 끝. 다시 추적
     public void AttackEnd();
 

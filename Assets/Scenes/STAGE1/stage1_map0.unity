@@ -37445,7 +37445,7 @@ GameObject:
   - component: {fileID: 819143470}
   m_Layer: 5
   m_Name: Hp
-  m_TagString: Untagged
+  m_TagString: PlayerHP
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -57588,7 +57588,7 @@ GameObject:
   - component: {fileID: 1283298969}
   m_Layer: 5
   m_Name: Def
-  m_TagString: Untagged
+  m_TagString: PlayerDEF
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -97313,6 +97313,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthInfo: {fileID: 11400000, guid: dc67c0c689e16bf45937909a1a8eb0e1, type: 2}
+  damage: 30
   findDis: 10
   attackDis: 3.5
   skillDelay: 3

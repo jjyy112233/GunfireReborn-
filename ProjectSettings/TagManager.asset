@@ -13,6 +13,8 @@ TagManager:
   - Gun
   - GunPivot
   - EnemyHead
+  - PlayerDEF
+  - PlayerHP
   layers:
   - Default
   - TransparentFX

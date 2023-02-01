@@ -6,13 +6,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "HealthObject.asset", menuName = "HealthObject/Health")]
 public class HealthObject : ScriptableObject
 {
-    enum Type
-    {
-        Player,
-        Enemy,
-        Boss
-    }
-
     public float maxHp;
     public float hp;
 

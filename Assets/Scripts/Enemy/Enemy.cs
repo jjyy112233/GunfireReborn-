@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
 
     public HealthObject healthInfo;
 
+    public float damage;
     public float findDis;
     public float attackDis;
     public float skillDelay;
@@ -64,7 +65,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
                 case EnemyState.Attack:
                     pathFinder.isStopped = true;
                     animator.SetTrigger("Attack");
-                    nowUpdate = null;
+                    nowUpdate = AttackUpdate;
                     break;
                 case EnemyState.Skill:
                     pathFinder.isStopped = false;
@@ -181,6 +182,14 @@ public class Enemy : MonoBehaviour, EnemyInterface
         }
     }
 
+    public void AttackOnDamage()
+    {
+        var players = GameObject.FindGameObjectsWithTag("Player").Where(t => Vector3.Distance(t.transform.position, transform.position) < attackDis);
+        foreach(var player in players)
+        {
+            player.GetComponent<PlayerController>().Hit(gameObject, damage);
+        }
+    }
 
     public void AttackEnd()
     {
@@ -195,6 +204,10 @@ public class Enemy : MonoBehaviour, EnemyInterface
         }
         else
             State = EnemyState.Move;
+    }
+    public void AttackUpdate()
+    {
+        transform.LookAt(target.transform);
     }
     void DieUpdate()
     {
