@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public Transform handR;
     public Transform handL;
 
-    public HealthPlayer healthInfo;
+    public PlayerInfo healthInfo;
 
     public enum STATE
     {

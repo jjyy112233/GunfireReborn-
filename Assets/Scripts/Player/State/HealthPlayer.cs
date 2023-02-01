@@ -1,11 +1,12 @@
 using DungeonArchitect.Navigation;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "HealtPlayer.asset", menuName = "HealthObject/HealthPlayer")]
-public class HealthPlayer : ScriptableObject
+public class PlayerInfo : ScriptableObject
 {
     public float maxHp;
     public float hp;

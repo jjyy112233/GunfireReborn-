@@ -19,6 +19,8 @@ public class Gun : MonoBehaviour
     public PlayerInput playerInput;
     public Animator playerAnimator;
 
+    public LayerMask layer;
+
     private void Start()
     {
         player = gameObject.GetComponentInParent<PlayerController>();
@@ -42,7 +44,7 @@ public class Gun : MonoBehaviour
             Vector3 hitPos = Vector3.zero;
             var ray = new Ray(pivot.position, Camera.main.transform.forward);
 
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layer))
             {
                 var forward = hit.point - transform.position;
                 forward.y = 0;

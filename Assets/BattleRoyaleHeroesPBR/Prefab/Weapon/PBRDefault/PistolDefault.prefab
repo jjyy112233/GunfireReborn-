@@ -101,8 +101,12 @@ MonoBehaviour:
   fireParticle: {fileID: 1336949550903370, guid: 4543ab5e3d405ec40a8d4e9aa5165030, type: 3}
   fireTimer: 0
   data: {fileID: 11400000, guid: 915214b8119c3ac47bcafac815666229, type: 2}
+  player: {fileID: 0}
   playerInput: {fileID: 0}
   playerAnimator: {fileID: 0}
+  layer:
+    serializedVersion: 2
+    m_Bits: 192
 --- !u!1 &5728282946386562933
 GameObject:
   m_ObjectHideFlags: 0
