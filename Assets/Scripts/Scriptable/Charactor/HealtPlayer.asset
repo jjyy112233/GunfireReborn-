@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: HealtPlayer
   m_EditorClassIdentifier: 
   maxHp: 100
-  hp: 100
-  defScale: 30
+  hp: 20
+  defScale: 50
   maxDef: 100
-  def: 100
+  def: 0
   speed: 0
