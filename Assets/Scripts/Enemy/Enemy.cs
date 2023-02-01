@@ -61,6 +61,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
                 case EnemyState.Hit:
                     pathFinder.isStopped = false;
                     pathFinder.speed = healthInfo.speed;
+                    animator.SetTrigger("Move");
                     nowUpdate = MoveUpdate;
                     break;
                 case EnemyState.Critical:
