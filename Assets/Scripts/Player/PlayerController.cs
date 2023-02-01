@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +10,7 @@ public class PlayerController : MonoBehaviour
     public Transform handR;
     public Transform handL;
 
-    public HealthPlayer healthInfo;
+    public PlayerInfo healthInfo;
 
     public enum STATE
     {
@@ -70,6 +71,7 @@ public class PlayerController : MonoBehaviour
 
         healthInfo.SetHpBar(GameObject.FindGameObjectWithTag("PlayerHP").GetComponent<Image>());
         healthInfo.SetDefBar(GameObject.FindGameObjectWithTag("PlayerDEF").GetComponent<Image>());
+
         healthInfo.Init();
 
         FindGun();

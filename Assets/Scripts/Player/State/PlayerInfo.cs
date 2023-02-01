@@ -1,11 +1,12 @@
 using DungeonArchitect.Navigation;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "HealtPlayer.asset", menuName = "HealthObject/HealthPlayer")]
-public class HealthPlayer : ScriptableObject
+[CreateAssetMenu(fileName = "PlayerInfo.asset", menuName = "HealthObject/PlayerInfo")]
+public class PlayerInfo : ScriptableObject
 {
     public float maxHp;
     public float hp;
@@ -40,6 +41,11 @@ public class HealthPlayer : ScriptableObject
     public bool isNonDef => def <= 0;
     public bool isDie => hp <= 0;
 
+    public int[] maxAmmo;
+    public int[] ammo;
+    TextMeshProUGUI[] ammoTxts;
+    string ammoFormat = @"{0} / {1}";
+
     public void Init()
     {
         hp = maxHp;
@@ -53,6 +59,11 @@ public class HealthPlayer : ScriptableObject
     {
         defBar = sprite;
     }
+    public void SetAmmoText(TextMeshProUGUI[] ammoTxts)
+    {
+        this.ammoTxts = ammoTxts;
+    }
+
     public void Hit(float dmg)
     {
         float defDmg = dmg - dmg * defScalePer;
@@ -78,5 +89,28 @@ public class HealthPlayer : ScriptableObject
         {
             HP = hp - dmg;
         }
+    }
+
+    public void ReloadAmmo(int reloadCnt, int type, int idx)
+    {
+        var t_maxAmmo = maxAmmo[type];
+        var t_ammo = ammo[type];
+        var needAmmo = reloadCnt - t_ammo;
+
+        if (t_maxAmmo == 0)
+            return;
+
+        if(t_maxAmmo >= needAmmo)
+        {
+            maxAmmo[type] -= needAmmo;
+            ammo[type] += needAmmo;
+        }
+        else
+        {
+            ammo[type] += maxAmmo[type];
+            maxAmmo[type] = 0;
+        }
+
+        ammoTxts[idx].text = string.Format(ammoFormat, ammo[type], maxAmmo[type]);
     }
 }
