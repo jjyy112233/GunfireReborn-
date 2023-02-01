@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: HealthObject
   m_EditorClassIdentifier: 
   maxHp: 100
-  hp: 0
+  hp: 100
   hpCnt: 1
-  defScale: 50
+  defScale: 70
   maxDef: 100
-  def: 0
+  def: 100
   speed: 3.5

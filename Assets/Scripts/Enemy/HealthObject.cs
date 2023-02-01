@@ -1,6 +1,7 @@
 using DungeonArchitect.Navigation;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "HealthObject.asset", menuName = "HealthObject/Health")]
@@ -11,7 +12,7 @@ public class HealthObject : ScriptableObject
 
     float HP {
         set {
-            hp = value;
+            hp = Mathf.Max(value,0);
             hpBar.size = new Vector2(hp / maxHp, 1);
         }
     }

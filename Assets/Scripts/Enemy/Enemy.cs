@@ -31,6 +31,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
         Idle,
         Move,
         Hit,
+        Critical,
         Attack,
         Skill,
         Die,
@@ -58,6 +59,11 @@ public class Enemy : MonoBehaviour, EnemyInterface
                     nowUpdate = MoveUpdate;
                     break;
                 case EnemyState.Hit:
+                    pathFinder.isStopped = false;
+                    pathFinder.speed = healthInfo.speed;
+                    nowUpdate = MoveUpdate;
+                    break;
+                case EnemyState.Critical:
                     pathFinder.isStopped = true;
                     animator.SetTrigger("Hit");
                     nowUpdate = null;
@@ -135,7 +141,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
             return;
         }
 
-        State = EnemyState.Hit;
+        State = stop? EnemyState.Critical : EnemyState.Hit;
         if (target == null)
         {
             target = nowTarget;
