@@ -51,6 +51,8 @@ public class PlayerController : MonoBehaviour
 
     Dictionary<STATE, ObjectAction> allStates = new Dictionary<STATE, ObjectAction>();
 
+    int coin;
+
     private void Awake()
     {
         var movement = new Movement(transform);
@@ -118,5 +120,14 @@ public class PlayerController : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void AddCoin(int g)
+    {
+        coin += g;
+    }
+    public void AddFood(int h)
+    {
+        healthInfo.AddHp(h);
     }
 }

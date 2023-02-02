@@ -8,7 +8,7 @@ public class WeaponData : ScriptableObject
 {
     public enum WeaponType
     {
-        None,
+        None=-1,
         Wepon1,
         Wepon2,
         Wepon3,

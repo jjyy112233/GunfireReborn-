@@ -15,6 +15,7 @@ TagManager:
   - EnemyHead
   - PlayerDEF
   - PlayerHP
+  - ChestUi
   layers:
   - Default
   - TransparentFX
@@ -24,9 +25,9 @@ TagManager:
   - UI
   - HitZone
   - CirticalZone
-  - 
-  - 
-  - 
+  - Item
+  - Player
+  - Enemy
   - 
   - 
   - 

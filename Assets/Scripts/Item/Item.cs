@@ -6,13 +6,20 @@ using UnityEngine;
 
 public abstract class Item : MonoBehaviour
 {
+    [SerializeField]
+    protected ItemSpawnManager.ItemType itemType;
+    [SerializeField]
+    protected bool isMove = false;
+
     Rigidbody itemRiginbody;
+    public void VelocityStop() => itemRiginbody.velocity = Vector3.zero;
+    public void PlayerDrop() => itemRiginbody.AddForce(Vector3.forward * 300);
     bool isTarget = false;
 
     PlayerController[] players;
     PlayerController target;
 
-    public abstract void ItemEffect();
+    public abstract void ItemEffect(PlayerController playerController = null);
     private void Awake()
     {
         itemRiginbody = GetComponent<Rigidbody>();
@@ -27,21 +34,8 @@ public abstract class Item : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (isTarget)
-            return;
-
-        foreach(var player in players)
-        {
-            var dis = Vector3.Distance(player.transform.position, transform.position);
-
-            if(dis < 10 )
-            {
-                isTarget = true;
-                target = player;
-                StartCoroutine(MoveToPlayer());
-                return;
-            }
-        }
+        if (isMove)
+            MoveItemUpdate();
     }
 
     IEnumerator MoveToPlayer()
@@ -53,11 +47,29 @@ public abstract class Item : MonoBehaviour
 
             if (Vector3.Distance(transform.position, target.transform.position) < 1)
             {
-                ItemEffect();
+                ItemEffect(target);
                 Destroy(gameObject);
             }
             yield return null;
         }
     }
 
+    public void MoveItemUpdate()
+    {
+        if (isTarget)
+            return;
+
+        foreach (var player in players)
+        {
+            var dis = Vector3.Distance(player.transform.position, transform.position);
+
+            if (dis < 10)
+            {
+                isTarget = true;
+                target = player;
+                StartCoroutine(MoveToPlayer());
+                return;
+            }
+        }
+    }
 }

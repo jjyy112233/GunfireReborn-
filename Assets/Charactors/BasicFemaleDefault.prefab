@@ -1924,7 +1924,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9217328031787757500}
   - component: {fileID: 1104611290464393346}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CrashZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}

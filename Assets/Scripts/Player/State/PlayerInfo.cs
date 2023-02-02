@@ -12,6 +12,7 @@ public class PlayerInfo : ScriptableObject
     public float hp;
 
     float HP {
+        get { return hp; }
         set {
             hp = value;
             hpBar.fillAmount =hp / maxHp;
@@ -79,5 +80,9 @@ public class PlayerInfo : ScriptableObject
         {
             HP = hp - dmg;
         }
+    }
+    public void AddHp(float heal)
+    {
+        HP = Mathf.Min(HP + heal, maxHp);
     }
 }

@@ -4,8 +4,21 @@ using UnityEngine;
 
 public class ItemAmmo : Item
 {
-    public override void ItemEffect()
+    [SerializeField]
+    WeaponData.WeaponType weaponType;
+
+    [SerializeField]
+    int count;
+
+    public ItemAmmo(WeaponData.WeaponType weaponType, int count)
     {
-        Debug.Log("ItemAmmo");
+        itemType = ItemSpawnManager.ItemType.Ammo;
+        this.weaponType = weaponType;
+        this.count = count;
+    }
+
+    public override void ItemEffect(PlayerController playerController = null)
+    {
+        GameObject.FindObjectOfType<WeaponManager>().AddAllAmmo(weaponType, count);
     }
 }

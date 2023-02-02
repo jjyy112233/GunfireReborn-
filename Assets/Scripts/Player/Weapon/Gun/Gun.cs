@@ -20,7 +20,7 @@ public class Gun : MonoBehaviour
     public LayerMask layer;
     [SerializeField]
     int ammo;
-    int Ammo {
+    public int Ammo {
         get { return ammo; }
         set {
             ammo = value;
@@ -36,7 +36,6 @@ public class Gun : MonoBehaviour
         player = gameObject.GetComponentInParent<PlayerController>();
         playerInput = gameObject.GetComponentInParent<PlayerInput>();
         playerAnimator = playerInput.transform.GetComponent<Animator>();
-        Ammo = data.reloadAmmo;
     }
     private void Update()
     {
@@ -76,12 +75,14 @@ public class Gun : MonoBehaviour
     {
         //Debug.Log("Test: " + Time.time);
         Instantiate(fireParticle, pivot.position, transform.rotation);
+
         Ammo -= data.useAmmo;
         weaponManager.SetAmmo(Ammo);
     }
     public void Reload()
     {
-        weaponManager.UseMyAmmo(data.type, data.reloadAmmo - Ammo);
+        if(!weaponButton.isDefault)
+            weaponManager.UseMyAmmo(data.type, data.reloadAmmo - Ammo);
         Ammo = data.reloadAmmo;
         weaponManager.SetAmmo(Ammo);
     }

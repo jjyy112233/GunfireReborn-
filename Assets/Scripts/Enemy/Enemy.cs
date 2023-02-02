@@ -23,7 +23,31 @@ public class Enemy : MonoBehaviour, EnemyInterface
     public float skillDelay;
     public float skillTimer;
     public float skillDis;
-    
+
+    public float hp;
+    SpriteRenderer hpBar;
+    float HP {
+        set {
+            hp = Mathf.Max(value, 0);
+            hpBar.size = new Vector2(hp / healthInfo.maxHp, 1);
+        }
+    }
+
+    public float def;
+    SpriteRenderer defBar;
+    public float defScalePer {
+        get {
+            return (100.0f - healthInfo.defScale) / 100.0f;
+        }
+    }
+    float DEF {
+        set {
+            def = value;
+            defBar.size = new Vector2(def / healthInfo.maxDef, 1);
+        }
+    }
+    public bool isNonDef => def <= 0;
+    public bool isDie => hp <= 0;
 
     public enum EnemyState
     {
@@ -60,13 +84,13 @@ public class Enemy : MonoBehaviour, EnemyInterface
                     break;
                 case EnemyState.Hit:
                     pathFinder.isStopped = false;
-                    pathFinder.speed = healthInfo.speed;
                     animator.SetTrigger("Move");
-                    nowUpdate = MoveUpdate;
+                    pathFinder.speed = healthInfo.speed;
+                    nowUpdate = HitUpdate;
                     break;
                 case EnemyState.Critical:
                     pathFinder.isStopped = true;
-                    animator.SetTrigger("Hit");
+                    animator.SetTrigger("Critical");
                     nowUpdate = null;
                     break;
                 case EnemyState.Attack:
@@ -83,10 +107,9 @@ public class Enemy : MonoBehaviour, EnemyInterface
                     break;
                 case EnemyState.Die:
                     pathFinder.isStopped = true;
-                    animator.SetTrigger("Die");
                     if(OnDie != null)
                         OnDie();
-                    nowUpdate = DieUpdate;
+                    animator.SetTrigger("Die");
                     break;
 
             }
@@ -106,15 +129,18 @@ public class Enemy : MonoBehaviour, EnemyInterface
         State = EnemyState.Idle;
         nowUpdate = IdleUpdate;
 
-        healthInfo.SetHpBar(transform.GetComponentInChildren<LookCamera>().hpBar);
-        healthInfo.SetDefBar(transform.GetComponentInChildren<LookCamera>().defBar);
-        healthInfo.Init();
+        SetHpBar(transform.GetComponentInChildren<LookCamera>().hpBar);
+        SetDefBar(transform.GetComponentInChildren<LookCamera>().defBar);
+        InitHealth();
+
+        OnDie += ItemSpawn;
     }
     private void Update()
     {
         skillTimer += Time.deltaTime;
         if (nowUpdate != null)
             nowUpdate();
+
     }
 
     public void Die()
@@ -135,8 +161,8 @@ public class Enemy : MonoBehaviour, EnemyInterface
 
     public void Hit(PlayerController nowTarget, float dmg, bool stop)
     {
-        healthInfo.Hit(dmg);
-        if (healthInfo.isDie)
+        Hit(dmg);
+        if (isDie)
         {
             Die();
             return;
@@ -188,6 +214,10 @@ public class Enemy : MonoBehaviour, EnemyInterface
             State = EnemyState.Attack;
         }
     }
+    void HitUpdate()
+    {
+        pathFinder.SetDestination(target.transform.position);
+    }
 
     public void AttackOnDamage()
     {
@@ -216,9 +246,69 @@ public class Enemy : MonoBehaviour, EnemyInterface
     {
         transform.LookAt(target.transform);
     }
-    void DieUpdate()
+    
+    void ItemSpawn()
     {
+        var itemSpawnManager = GameObject.FindObjectOfType<ItemSpawnManager>();
 
+        if (UnityEngine.Random.value < 0.7f)
+        {
+            itemSpawnManager.MakeItem(ItemSpawnManager.ItemType.Ammo, transform.localPosition + Vector3.up);
+        }
+        if (UnityEngine.Random.value < 0.3f)
+        {
+            itemSpawnManager.MakeItem(ItemSpawnManager.ItemType.Weapon, transform.localPosition + Vector3.up);
+        }
+        itemSpawnManager.MakeItem(ItemSpawnManager.ItemType.Coin, transform.localPosition + Vector3.up);
+        if (UnityEngine.Random.value < 0.99f)
+        {
+            itemSpawnManager.MakeItem(ItemSpawnManager.ItemType.Food, transform.localPosition + Vector3.up);
+        }
     }
 
+    #region Health Info
+
+
+    public void Hit(float dmg)
+    {
+        float defDmg = dmg - dmg * defScalePer;
+        if (!isNonDef)
+        {
+            if (defDmg >= def)
+            {
+                if (def != 0)
+                {
+                    var leftDef = Mathf.Abs(def - (dmg * defScalePer));
+                    var leftDmg = leftDef * (100.0f / (100.0f - healthInfo.defScale));
+
+                    DEF = 0;
+                    HP = hp - leftDmg;
+                }
+            }
+            else
+            {
+                DEF = def - defDmg;
+            }
+        }
+        else
+        {
+            HP = hp - dmg;
+        }
+    }
+
+    public void InitHealth()
+    {
+        hp = healthInfo.maxHp;
+        def = healthInfo.maxDef;
+    }
+    public void SetHpBar(SpriteRenderer sprite)
+    {
+        hpBar = sprite;
+    }
+    public void SetDefBar(SpriteRenderer sprite)
+    {
+        defBar = sprite;
+    }
+
+    #endregion
 }

@@ -9,11 +9,11 @@ using static WeaponData;
 public class WeaponManager : MonoBehaviour
 {
     public Gun[] weaponPrefabs;
+    public WeaponButton[] weaponButtons;
     Dictionary<string, Gun> weapons = new Dictionary<string, Gun>();
 
-    public WeaponButton[] weaponButtons;
-    public Dictionary<WeaponButton, Gun> connecntWeapon = new Dictionary<WeaponButton, Gun>();
-    public Dictionary<WeaponType, int> allAmmoCount = new Dictionary<WeaponType, int>();
+    Dictionary<WeaponButton, Gun> connecntWeapon = new Dictionary<WeaponButton, Gun>();
+    Dictionary<WeaponType, int> allAmmoCount = new Dictionary<WeaponType, int>();
 
     PlayerController player;
     Gun nowWeapon;
@@ -33,14 +33,9 @@ public class WeaponManager : MonoBehaviour
         for (var type = WeaponType.Wepon1; type < WeaponType.Count; type++)
         {
             allAmmoCount[type] = 100;
-            var TypeWeapon = weaponButtons.Where(t => t.type == type);
-            foreach(var t in TypeWeapon)
-            {
-                t.SetAllAmmo(allAmmoCount[type]);
-            }
         }
 
-        GetWeapon(defaultWeapon);
+        GetWeapon(defaultWeapon, weapons[defaultWeapon].data.reloadAmmo);
     }
 
     public void ChangeWeapon(WeaponButton button)
@@ -54,7 +49,7 @@ public class WeaponManager : MonoBehaviour
         player.gun = nowGun;
         nowGun.gameObject.SetActive(true);
     }
-    public void GetWeapon(string code)
+    public void GetWeapon(string code, int ammo)
     {
         //비어있는 무기창 탐색
         var emptyBtns = weaponButtons.Where(t => string.IsNullOrEmpty(t.code)).ToArray();
@@ -68,6 +63,10 @@ public class WeaponManager : MonoBehaviour
 
             nowWeapon = deleteGunButton;
             player.gun.gameObject.SetActive(false);
+
+            GameObject.FindObjectOfType<ItemSpawnManager>().DropWeapon(
+                Camera.main.transform.position + Vector3.forward, Camera.main.transform.rotation, 
+                connecntWeapon[deleteGunButton].data.code, connecntWeapon[deleteGunButton].Ammo);
 
             Destroy(connecntWeapon[deleteGunButton].gameObject);
             connecntWeapon.Remove(deleteGunButton);
@@ -84,8 +83,9 @@ public class WeaponManager : MonoBehaviour
 
         nowWeapon.code = code;
 
-        nowWeapon.type = player.gun.data.type;
+        nowWeapon.Type = player.gun.data.type;
         player.gun.weaponButton = nowWeapon;
+        player.gun.Ammo = ammo;
         connecntWeapon[nowWeapon] = player.gun;
     }
 
@@ -97,7 +97,7 @@ public class WeaponManager : MonoBehaviour
     public void AddAllAmmo(WeaponType weaponType, int allAmmo)
     {
         allAmmoCount[weaponType] += allAmmo;
-        var TypeWeapon = weaponButtons.Where(t => t.type == weaponType);
+        var TypeWeapon = weaponButtons.Where(t => t.Type == weaponType);
         foreach (var weapon in TypeWeapon)
         {
             weapon.SetAllAmmo(allAmmoCount[weaponType]);
@@ -108,7 +108,7 @@ public class WeaponManager : MonoBehaviour
     {
         allAmmoCount[weaponType] -= count;
 
-        var TypeWeapon = weaponButtons.Where(t => t.type == weaponType);
+        var TypeWeapon = weaponButtons.Where(t => t.Type == weaponType);
         foreach (var weapon in TypeWeapon)
         {
             weapon.SetAllAmmo(allAmmoCount[weaponType]);
@@ -118,22 +118,25 @@ public class WeaponManager : MonoBehaviour
     public void SetAmmo(int ammo)
     {
         var button = player.gun.weaponButton;
-        button.SetAmmoTxt(ammo, allAmmoCount[player.gun.data.type]);
+        if(!button.isDefault)
+            button.SetAmmoTxt(ammo, allAmmoCount[player.gun.data.type]);
+        else
+            button.SetAmmoTxt(ammo, '∞');
     }
 
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.F1))
         {
-            GetWeapon("GUN000");
+            GetWeapon("GUN000",10);
         }
         if (Input.GetKeyDown(KeyCode.F2))
         {
-            GetWeapon("GUN001");
+            GetWeapon("GUN001",5);
         }
         if (Input.GetKeyDown(KeyCode.F3))
         {
-            GetWeapon("GUN002");
+            GetWeapon("GUN002",3);
         }
     }
 }

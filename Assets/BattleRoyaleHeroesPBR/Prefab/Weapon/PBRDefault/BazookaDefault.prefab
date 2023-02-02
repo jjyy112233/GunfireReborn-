@@ -160,7 +160,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1247223829425884222}
   - component: {fileID: 1247223829433148382}
-  - component: {fileID: -7297065529673151728}
   m_Layer: 0
   m_Name: BazookaDefault
   m_TagString: Gun
@@ -206,29 +205,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
---- !u!114 &-7297065529673151728
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1247223829425721374}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09c67c87262f2e248b292ae0a4e77a76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pivot: {fileID: 4252961247446467654}
-  fireParticle: {fileID: 1336949550903370, guid: 4543ab5e3d405ec40a8d4e9aa5165030, type: 3}
-  weaponButton: {fileID: 0}
-  fireTimer: 0
-  data: {fileID: 11400000, guid: a94900c30bb4ff94eb163a9bf1662391, type: 2}
-  player: {fileID: 0}
-  playerInput: {fileID: 0}
-  playerAnimator: {fileID: 0}
-  layer:
-    serializedVersion: 2
-    m_Bits: 192
 --- !u!1 &2428472345303651738
 GameObject:
   m_ObjectHideFlags: 0

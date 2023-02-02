@@ -21,4 +21,4 @@ MonoBehaviour:
   reloadAmmo: 3
   useAmmo: 1
   aimPoint: 
-  type: 3
+  type: 2
