@@ -55,7 +55,11 @@ public class Gun : MonoBehaviour
             RaycastHit hit;
             Vector3 hitPos = Vector3.zero;
             var ray = new Ray(pivot.position, Camera.main.transform.forward);
-
+            
+            //if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+            //{
+            //    Debug.Log(hit.collider.name);
+            //}
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, layer))
             {
                 var forward = hit.point - transform.position;
@@ -66,7 +70,6 @@ public class Gun : MonoBehaviour
                 if (enemy != null)
                 {
                     enemy.Hit(player, data.dmg, hit.collider.transform.CompareTag("EnemyHead"));
-                    Debug.Log(hit.collider.name);
                 }
             }
         }

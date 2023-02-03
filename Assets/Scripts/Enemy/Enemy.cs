@@ -9,7 +9,6 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour, EnemyInterface
 {
-    LayerMask targetMask;
     NavMeshAgent pathFinder; // 경로계산 AI 에이전트
 
     Animator animator;
@@ -54,7 +53,6 @@ public class Enemy : MonoBehaviour, EnemyInterface
         None,
         Idle,
         Move,
-        Hit,
         Critical,
         Attack,
         Skill,
@@ -63,6 +61,9 @@ public class Enemy : MonoBehaviour, EnemyInterface
 
     EnemyState state;
     public EnemyState State {
+        get {
+            return state;
+        }
         set {
             if (state == value)
                 return;
@@ -71,7 +72,6 @@ public class Enemy : MonoBehaviour, EnemyInterface
             switch (state)
             {
                 case EnemyState.Idle:
-                    animator.SetTrigger("Idle");
                     nowUpdate = IdleUpdate;
                     break;
                 case EnemyState.Move:
@@ -81,12 +81,6 @@ public class Enemy : MonoBehaviour, EnemyInterface
                     pathFinder.speed = healthInfo.speed;
                     animator.SetTrigger("Move");
                     nowUpdate = MoveUpdate;
-                    break;
-                case EnemyState.Hit:
-                    pathFinder.isStopped = false;
-                    animator.SetTrigger("Move");
-                    pathFinder.speed = healthInfo.speed;
-                    nowUpdate = HitUpdate;
                     break;
                 case EnemyState.Critical:
                     pathFinder.isStopped = true;
@@ -109,6 +103,9 @@ public class Enemy : MonoBehaviour, EnemyInterface
                     pathFinder.isStopped = true;
                     if(OnDie != null)
                         OnDie();
+                    if (OnDieRoom != null)
+                        OnDieRoom(this);
+
                     animator.SetTrigger("Die");
                     break;
 
@@ -120,11 +117,11 @@ public class Enemy : MonoBehaviour, EnemyInterface
 
     //죽을때 템 드랍
     Action OnDie;
+    Action<Enemy> OnDieRoom;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        targetMask = LayerMask.GetMask("Player");
         pathFinder = GetComponent<NavMeshAgent>();
         State = EnemyState.Idle;
         nowUpdate = IdleUpdate;
@@ -162,17 +159,18 @@ public class Enemy : MonoBehaviour, EnemyInterface
     public void Hit(PlayerController nowTarget, float dmg, bool stop)
     {
         Hit(dmg);
+        if (target == null)
+        {
+            target = nowTarget;
+        }
         if (isDie)
         {
             Die();
             return;
         }
 
-        State = stop? EnemyState.Critical : EnemyState.Hit;
-        if (target == null)
-        {
-            target = nowTarget;
-        }
+        State = stop? EnemyState.Critical : (State == EnemyState.Idle ? EnemyState.Move : State);
+        
 
     }
 
@@ -309,6 +307,10 @@ public class Enemy : MonoBehaviour, EnemyInterface
     {
         defBar = sprite;
     }
-
     #endregion
+
+    public void AddDieEvent(Action<Enemy> dieEvent)
+    {
+        OnDieRoom += dieEvent;
+    }
 }
