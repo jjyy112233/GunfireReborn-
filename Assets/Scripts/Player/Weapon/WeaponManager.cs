@@ -79,6 +79,7 @@ public class WeaponManager : MonoBehaviour
         }
 
         player.gun = Instantiate(weapons[code], player.handR).GetComponent<Gun>();
+        player.gun.transform.localPosition = new Vector3(0.1f, -0.05f, 0);
         player.gun.transform.localRotation = Quaternion.Euler(0,90,90);
 
         nowWeapon.code = code;

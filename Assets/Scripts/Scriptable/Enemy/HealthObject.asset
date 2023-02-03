@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a144eb64fcc5d3542b8585264668cb4f, type: 3}
   m_Name: HealthObject
   m_EditorClassIdentifier: 
-  maxHp: 100
-  hp: 100
+  maxHp: 50
   hpCnt: 1
-  defScale: 70
-  maxDef: 100
-  def: 100
+  defScale: 30
+  maxDef: 50
   speed: 3.5

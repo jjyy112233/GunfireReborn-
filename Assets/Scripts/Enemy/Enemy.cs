@@ -36,7 +36,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
     SpriteRenderer defBar;
     public float defScalePer {
         get {
-            return (100.0f - healthInfo.defScale) / 100.0f;
+            return healthInfo.defScale / 100.0f;
         }
     }
     float DEF {
@@ -277,7 +277,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
                 if (def != 0)
                 {
                     var leftDef = Mathf.Abs(def - (dmg * defScalePer));
-                    var leftDmg = leftDef * (100.0f / (100.0f - healthInfo.defScale));
+                    var leftDmg = leftDef * (100.0f / healthInfo.defScale);
 
                     DEF = 0;
                     HP = hp - leftDmg;

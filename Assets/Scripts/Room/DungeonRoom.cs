@@ -11,6 +11,7 @@ public class DungeonRoom : MonoBehaviour
     public Chest chest;
 
     Collider roomCollider;
+    public Potal potal;
 
     private void Awake()
     {
@@ -63,6 +64,7 @@ public class DungeonRoom : MonoBehaviour
                 && roomCollider.bounds.Contains(playerCol.bounds.max))
             {
                 Debug.Log("Find!");
+                roomCollider.enabled = false;
                 insertPlayer = true;
                 EnterPlayer();
             }
@@ -85,6 +87,10 @@ public class DungeonRoom : MonoBehaviour
             door.Open();
         }
         chest.Openable = true;
+
+        if (potal != null)
+            potal.gameObject.SetActive(true);
+
 
         Destroy(roomCollider);
         Destroy(this);

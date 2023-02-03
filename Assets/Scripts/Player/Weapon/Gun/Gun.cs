@@ -1,3 +1,5 @@
+#define Debug
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +20,7 @@ public class Gun : MonoBehaviour
     WeaponManager weaponManager;
 
     public LayerMask layer;
+
     [SerializeField]
     int ammo;
     public int Ammo {
@@ -40,8 +43,15 @@ public class Gun : MonoBehaviour
     private void Update()
     {
         fireTimer += Time.deltaTime;
+#if Debug2
+        if (Input.GetMouseButton(0))
+#else
         if (playerInput.shot_joystick.isDown)
+#endif
             Fire();
+
+
+        // Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.localPosition + Camera.main.transform.forward * 1000);
     }
     public void Fire() //일정시간마다 애니메이션 반복
     {
@@ -52,16 +62,21 @@ public class Gun : MonoBehaviour
             fireTimer = 0f;
             playerAnimator.SetTrigger("FireSingle");
 
-            RaycastHit hit;
-            Vector3 hitPos = Vector3.zero;
-            var ray = new Ray(pivot.position, Camera.main.transform.forward);
-            
-            //if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-            //{
-            //    Debug.Log(hit.collider.name);
-            //}
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layer))
             {
+                var hits = Physics.RaycastAll(Camera.main.transform.position, Camera.main.transform.forward, Mathf.Infinity);
+                for (int i = 0; i < hits.Length; i++)
+                {
+                    if (Input.GetKey(KeyCode.Space))
+                        hits[i].transform.name = "TEST_RAY";
+                    Debug.Log(hits[i].transform.name);
+                }
+            }
+
+            RaycastHit hit;
+            var ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layer))
+                {
                 var forward = hit.point - transform.position;
                 forward.y = 0;
                 forward.Normalize();
@@ -74,6 +89,7 @@ public class Gun : MonoBehaviour
             }
         }
     }
+
     public void FireBullet()
     {
         //Debug.Log("Test: " + Time.time);
