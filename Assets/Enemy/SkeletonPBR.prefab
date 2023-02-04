@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6801208655268460734}
   m_Layer: 0
   m_Name: CrashZone
-  m_TagString: Untagged
+  m_TagString: Body
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -443,7 +443,7 @@ GameObject:
   - component: {fileID: 4124886300204044307}
   m_Layer: 0
   m_Name: Body
-  m_TagString: Untagged
+  m_TagString: EnemyBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

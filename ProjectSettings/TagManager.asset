@@ -16,6 +16,8 @@ TagManager:
   - PlayerDEF
   - PlayerHP
   - ChestUi
+  - Body
+  - EnemyBody
   layers:
   - Default
   - TransparentFX

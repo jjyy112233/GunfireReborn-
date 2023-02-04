@@ -1,5 +1,6 @@
 #define Debug
 
+using Newtonsoft.Json.Schema;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -62,15 +63,15 @@ public class Gun : MonoBehaviour
             fireTimer = 0f;
             playerAnimator.SetTrigger("FireSingle");
 
-            {
-                var hits = Physics.RaycastAll(Camera.main.transform.position, Camera.main.transform.forward, Mathf.Infinity);
-                for (int i = 0; i < hits.Length; i++)
-                {
-                    if (Input.GetKey(KeyCode.Space))
-                        hits[i].transform.name = "TEST_RAY";
-                    Debug.Log(hits[i].transform.name);
-                }
-            }
+            //{
+            //    var hits = Physics.RaycastAll(Camera.main.transform.position, Camera.main.transform.forward, Mathf.Infinity);
+            //    for (int i = 0; i < hits.Length; i++)
+            //    {
+            //        if (Input.GetKey(KeyCode.Space))
+            //            hits[i].transform.name = "TEST_RAY";
+            //        Debug.Log(hits[i].transform.tag);
+            //    }
+            //}
 
             RaycastHit hit;
             var ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
@@ -85,6 +86,20 @@ public class Gun : MonoBehaviour
                 if (enemy != null)
                 {
                     enemy.Hit(player, data.dmg, hit.collider.transform.CompareTag("EnemyHead"));
+                }
+
+                var boss = hit.transform.GetComponent<Boss>();
+                if(boss != null)
+                {
+                    //boss.Hit(player, data.dmg, hit.collider.transform.CompareTag("EnemyHead"));
+                    Debug.Log(hit.collider.transform.tag);
+                }
+
+                var hitDesObj = hit.collider.transform.GetComponent<HitDestory>();
+                if (hitDesObj != null)
+                {
+                    hitDesObj.OnHit();
+                    Debug.Log(hit.collider.transform.tag);
                 }
             }
         }
