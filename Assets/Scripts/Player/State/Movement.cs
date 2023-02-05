@@ -7,8 +7,14 @@ public class Movement : ObjectAction
 {
     float moveSpeed = 10f;
     bool isJump;
-    float fireDelay = 0.3f;
-    float fireTimer = 0f;
+
+    float rollingDelay = 3f;    
+    float rollingTimer = 0;
+    public float RollingScale {
+        get {
+           return rollingTimer / rollingDelay;
+        }
+    }
 
     Transform player;
     PlayerInput playerInput;
@@ -17,6 +23,7 @@ public class Movement : ObjectAction
     SphereCollider rollingCol;
 
     Camera camera;
+
     float aimSen = 2f;
     float rotateSpeed = 180f;
 
@@ -35,11 +42,18 @@ public class Movement : ObjectAction
 
 
         playerAnimator.SetTrigger("Stage");
+        rollingTimer = rollingDelay;
     }
 
 
     public void Rolling()
     {
+        if (rollingTimer < rollingDelay)
+        {
+            return;
+        }
+
+        rollingTimer = 0f;
         rollingCol.enabled = true;
         var hor = Mathf.Abs(playerInput.move_joystick.Horizontal);
         var ver = Mathf.Abs(playerInput.move_joystick.Vertical);
@@ -130,7 +144,8 @@ public class Movement : ObjectAction
     {
         Move();
         LookJoystick();
-        fireTimer += Time.deltaTime;
+
+        rollingTimer += Time.deltaTime;
 
         if (isJump)
             playerAnimator.SetFloat("JumpVelocity", playerRigidBody.velocity.y);

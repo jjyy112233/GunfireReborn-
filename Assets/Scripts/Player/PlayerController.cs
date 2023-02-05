@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public Transform handL;
 
     public PlayerInfo healthInfo;
+    public Level level;
 
     public enum STATE
     {
@@ -53,9 +54,14 @@ public class PlayerController : MonoBehaviour
 
     int coin;
 
+    Movement movement;
+
+    Image rollingDelay;
+    Image skillDelay;
+
     private void Awake()
     {
-        var movement = new Movement(transform);
+        movement = new Movement(transform);
         allStates[STATE.Move] = movement;
         allStates[STATE.Victory] = new Victory(transform);
         allStates[STATE.Die] = new Die(transform);
@@ -68,6 +74,7 @@ public class PlayerController : MonoBehaviour
         stageManager.Reload.onClick.AddListener(movement.Reload);
         stageManager.Jump.onClick.AddListener(movement.Jump);
         stageManager.Rolling.onClick.AddListener(movement.Rolling);
+        rollingDelay = stageManager.Rolling.GetComponentInChildren<Image>();
 
         healthInfo.SetHpBar(GameObject.FindGameObjectWithTag("PlayerHP").GetComponent<Image>());
         healthInfo.SetDefBar(GameObject.FindGameObjectWithTag("PlayerDEF").GetComponent<Image>());
@@ -75,9 +82,12 @@ public class PlayerController : MonoBehaviour
 
         FindGun();
     }
-
+    private void Start()
+    {
+    }
     private void FixedUpdate()
     {
+        rollingDelay.fillAmount = 1 - movement.RollingScale;
         currentAction.MoveUpdate();
     }
 

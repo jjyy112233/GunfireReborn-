@@ -4,7 +4,6 @@ using Newtonsoft.Json.Schema;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Analytics;
 
 public class Gun : MonoBehaviour
 {
@@ -21,6 +20,9 @@ public class Gun : MonoBehaviour
     WeaponManager weaponManager;
 
     public LayerMask layer;
+
+    float Delay { get { return data.delay * player.level.FireLevel; } }
+    float Damamge { get { return data.dmg * player.level.DmgLevel; } }
 
     [SerializeField]
     int ammo;
@@ -58,20 +60,10 @@ public class Gun : MonoBehaviour
     {
         if (Ammo == 0)
             return;
-        if (fireTimer > data.delay)
+        if (fireTimer > Delay)
         {
             fireTimer = 0f;
             playerAnimator.SetTrigger("FireSingle");
-
-            //{
-            //    var hits = Physics.RaycastAll(Camera.main.transform.position, Camera.main.transform.forward, Mathf.Infinity);
-            //    for (int i = 0; i < hits.Length; i++)
-            //    {
-            //        if (Input.GetKey(KeyCode.Space))
-            //            hits[i].transform.name = "TEST_RAY";
-            //        Debug.Log(hits[i].transform.tag);
-            //    }
-            //}
 
             RaycastHit hit;
             var ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
@@ -85,13 +77,13 @@ public class Gun : MonoBehaviour
                 var enemy = hit.transform.GetComponent<Enemy>();
                 if (enemy != null)
                 {
-                    enemy.Hit(player, data.dmg, hit.collider.transform.CompareTag("EnemyHead"));
+                    enemy.Hit(player, Damamge, hit.collider.transform.CompareTag("EnemyHead"));
                 }
 
                 var boss = hit.transform.GetComponent<Boss>();
                 if(boss != null)
                 {
-                    boss.Hit(data.dmg * (hit.collider.transform.CompareTag("EnemyHead") ? 2f : 1f));
+                    boss.Hit(Damamge * (hit.collider.transform.CompareTag("EnemyHead") ? 2f : 1f));
                     Debug.Log(hit.collider.transform.tag);
                 }
 

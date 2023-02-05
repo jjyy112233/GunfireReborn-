@@ -18,6 +18,8 @@ TagManager:
   - ChestUi
   - Body
   - EnemyBody
+  - RollingDelay
+  - RollingButton
   layers:
   - Default
   - TransparentFX
