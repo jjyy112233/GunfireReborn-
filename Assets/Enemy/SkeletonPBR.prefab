@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7343751248069423812}
   - component: {fileID: 6801208655268460734}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: CrashZone
   m_TagString: Body
   m_Icon: {fileID: 0}

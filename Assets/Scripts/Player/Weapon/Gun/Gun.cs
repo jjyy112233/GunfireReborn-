@@ -91,7 +91,7 @@ public class Gun : MonoBehaviour
                 var boss = hit.transform.GetComponent<Boss>();
                 if(boss != null)
                 {
-                    //boss.Hit(player, data.dmg, hit.collider.transform.CompareTag("EnemyHead"));
+                    boss.Hit(data.dmg * (hit.collider.transform.CompareTag("EnemyHead") ? 2f : 1f));
                     Debug.Log(hit.collider.transform.tag);
                 }
 

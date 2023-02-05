@@ -1,11 +1,15 @@
+using DungeonArchitect.Samples.ShooterGame;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class OrcAttack : MonoBehaviour
 {
     Rigidbody rb;
     public GameObject destoryEffect;
+    public HealthObject healthInfo;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -18,16 +22,23 @@ public class OrcAttack : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(!collision.collider.CompareTag("EnemyBody"))
+        if (!collision.collider.CompareTag("EnemyBody"))
         {
-            Debug.Log("Col");
             var d = Instantiate(destoryEffect);
-            d.transform.position = transform.position + new Vector3(0,0.5f,0);
-            //d.transform.rotation = transform.rotation;
-            //d.transform.Rotate(new Vector3(180,0,0));
+            d.transform.position = transform.position;
 
-            //Hit Player
-            Destroy(gameObject);
+            var players = Physics.SphereCastAll(transform.position, 3, Vector3.up, 0).
+                Where(t => t.collider.transform.GetComponent<PlayerController>()).
+                Select(t => t.collider.transform.GetComponent<PlayerController>());
+
+            Debug.Log(players.Count());
+            foreach (var p in players)
+            {
+                Debug.Log(p.transform.name);
+                p.Hit(null, healthInfo.damage1);
+            }
+            transform.GetComponentInChildren<Collider>().enabled = false;
         }
+        Destroy(gameObject);
     }
 }

@@ -12,4 +12,10 @@ public class HealthObject : ScriptableObject
     public float defScale = 0;
     public float maxDef;
     public float speed;
+
+    public float damage1;
+    public float damage2;
+    public float damage3;
+    public float damage4;
+    public float damage5;
 }

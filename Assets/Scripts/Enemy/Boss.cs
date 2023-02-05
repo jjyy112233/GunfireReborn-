@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -28,8 +29,13 @@ public class Boss : MonoBehaviour, BossInterface
     public Transform InvPos;
     GameObject nowInvEffect;
 
+    public Camera dieCamera;
 
     public HealthObject healthInfo;
+
+    float attack1_Dmg;
+    float attack2_Dmg;
+    float attack3_Dmg;
 
     public float hp;
     public Image hpBar;
@@ -52,7 +58,8 @@ public class Boss : MonoBehaviour, BossInterface
             return def;
         }
         set {
-            def = value;
+            def = Mathf.Min(value, healthInfo.maxDef);
+            def = Mathf.Max(def, 0);
             defBar.fillAmount = def / healthInfo.maxDef;
         }
     }
@@ -168,7 +175,7 @@ public class Boss : MonoBehaviour, BossInterface
                     NowUpdate = InvincibleUpdate;
                     break;
                 case BossState.Die:
-                    pathFind.isStopped = true;
+                    pathFind.enabled = false;
                     animator.SetTrigger("Die");
                     NowUpdate = DieUpdate;
                     break;
@@ -236,7 +243,7 @@ public class Boss : MonoBehaviour, BossInterface
         else if(IsAttack)
         {
             Debug.Log("A12");
-            var dis = Vector3.Distance(target.transform.position, transform.position);
+            var dis = Vector3.Distance(target.transform.position + Vector3.up, transform.position);
             if (dis <= pathFind.stoppingDistance * 0.7f)
                 State = BossState.Attack2;
             else if (dis <= pathFind.stoppingDistance)
@@ -259,6 +266,14 @@ public class Boss : MonoBehaviour, BossInterface
         {
             pathFind.SetDestination(target.transform.position);
         }
+
+        var hitPlayers = players.Where(t => Vector3.Distance(transform.position, t.transform.position) <7f);
+
+        foreach(var p in hitPlayers)
+        {
+            p.Hit(gameObject, healthInfo.damage3);
+        }
+        
     }
 
     private void AttackUpdate()
@@ -272,11 +287,46 @@ public class Boss : MonoBehaviour, BossInterface
 
     private void InvincibleUpdate()
     {
-        //DEF += Time.deltaTime * 10;
+        DEF += Time.deltaTime * 10;
+        if(DEF >= healthInfo.maxDef)
+        {
+            BorkenShield();
+        }
     }
 
     public void Hit(float dmg)
     {
+        if (State == BossState.Invincible)
+            return;
+        float defDmg = dmg - dmg * defScalePer;
+        if (!isNonDef)
+        {
+            if (defDmg >= def)
+            {
+                if (def != 0)
+                {
+                    var leftDef = Mathf.Abs(def - (dmg * defScalePer));
+                    var leftDmg = leftDef * (100.0f / healthInfo.defScale);
+
+                    DEF = 0;
+                    HP = hp - leftDmg;
+                }
+            }
+            else
+            {
+                DEF = def - defDmg;
+            }
+        }
+        else
+        {
+            HP = hp - dmg;
+        }
+
+        if (isDie)
+        {
+            Die();
+            return;
+        }
     }
 
     public void Invincible()
@@ -286,10 +336,20 @@ public class Boss : MonoBehaviour, BossInterface
 
     public void Die()
     {
+        State = BossState.Die;
     }
 
     public void DieEnd()
     {
+        ItemSpawn();
+        this.enabled = false;
+        var cols = transform.GetComponentsInChildren<Collider>();
+
+        foreach(var col in cols)
+        {
+            col.enabled = false;
+        }
+        
     }
 
     public void Attack()
@@ -326,15 +386,16 @@ public class Boss : MonoBehaviour, BossInterface
             nowAttack3Effect = null;
         }
 
+    }
+
+    public void BorkenShield()
+    {
         if (nowInvEffect != null)
         {
             Destroy(nowInvEffect);
             nowInvEffect = null;
         }
-    }
-
-    public void BorkenShield()
-    {
+        Debug.Log("BorkenShield");
         attack3_Timer = 0;
         State = BossState.Move;
     }
@@ -342,5 +403,30 @@ public class Boss : MonoBehaviour, BossInterface
     {
         hp = healthInfo.maxHp;
         def = healthInfo.maxDef;
+
+        attack1_Dmg = healthInfo.damage1;
+        attack2_Dmg = healthInfo.damage2;
+        attack3_Dmg = healthInfo.damage3;
+    }
+
+    void ItemSpawn()
+    {
+        var itemSpawnManager = GameObject.FindObjectOfType<ItemSpawnManager>();
+
+        itemSpawnManager.MakeItem(ItemSpawnManager.ItemType.Ammo, transform.position + Vector3.up*3);
+        itemSpawnManager.MakeItem(ItemSpawnManager.ItemType.Ammo, transform.position + Vector3.up * 3);
+        itemSpawnManager.MakeItem(ItemSpawnManager.ItemType.Ammo, transform.position + Vector3.up * 3);
+        itemSpawnManager.MakeItem(ItemSpawnManager.ItemType.Weapon, transform.position + Vector3.up * 3);
+        itemSpawnManager.MakeItem(ItemSpawnManager.ItemType.Weapon, transform.position + Vector3.up * 3);
+        itemSpawnManager.MakeItem(ItemSpawnManager.ItemType.Weapon, transform.position + Vector3.up * 3);
+        itemSpawnManager.MakeItem(ItemSpawnManager.ItemType.Coin, transform.position + Vector3.up * 3);
+        itemSpawnManager.MakeItem(ItemSpawnManager.ItemType.Coin, transform.position + Vector3.up * 3);
+        itemSpawnManager.MakeItem(ItemSpawnManager.ItemType.Coin, transform.position + Vector3.up * 3);
+        itemSpawnManager.MakeItem(ItemSpawnManager.ItemType.Coin, transform.position + Vector3.up * 3);
+        itemSpawnManager.MakeItem(ItemSpawnManager.ItemType.Coin, transform.position + Vector3.up * 3);
+        itemSpawnManager.MakeItem(ItemSpawnManager.ItemType.Coin, transform.position + Vector3.up * 3);
+        itemSpawnManager.MakeItem(ItemSpawnManager.ItemType.Food, transform.position + Vector3.up * 3);
+        itemSpawnManager.MakeItem(ItemSpawnManager.ItemType.Food, transform.position + Vector3.up * 3);
+        itemSpawnManager.MakeItem(ItemSpawnManager.ItemType.Food, transform.position + Vector3.up * 3);
     }
 }

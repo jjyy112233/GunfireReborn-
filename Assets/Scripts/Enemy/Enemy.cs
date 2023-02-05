@@ -16,13 +16,13 @@ public class Enemy : MonoBehaviour, EnemyInterface
 
     public HealthObject healthInfo;
 
-    public float damage;
     public float findDis;
     public float attackDis;
     public float skillDelay;
     public float skillTimer;
     public float skillDis;
 
+    float damage;
     public float hp;
     SpriteRenderer hpBar;
     float HP {
@@ -298,6 +298,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
     {
         hp = healthInfo.maxHp;
         def = healthInfo.maxDef;
+        damage = healthInfo.damage1;
     }
     public void SetHpBar(SpriteRenderer sprite)
     {

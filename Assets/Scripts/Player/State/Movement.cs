@@ -88,6 +88,7 @@ public class Movement : ObjectAction
             dir.Normalize();
         }
         var delta = dir * moveSpeed * Time.deltaTime;
+        delta.y = 0;
 
         playerRigidBody.AddForce(delta * 2000);
         //playerRigidBody.MovePosition(playerRigidBody.position + delta);
@@ -110,7 +111,7 @@ public class Movement : ObjectAction
         
 #endif
         camX += ver;
-        //camX = Mathf.Clamp(camX, -30, 30);
+        camX = Mathf.Clamp(camX, -30, 30);
 
         camY += hor;
 

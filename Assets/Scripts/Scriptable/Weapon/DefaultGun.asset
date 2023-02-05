@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefaultGun
   m_EditorClassIdentifier: 
   code: GUN000
-  dmg: 30
+  dmg: 300
   ran: 1000
   speed: 0
   delay: 1

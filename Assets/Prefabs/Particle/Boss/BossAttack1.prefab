@@ -4961,16 +4961,16 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4542947410328526011}
-  m_LocalRotation: {x: -1, y: 0, z: 0, w: 0}
-  m_LocalPosition: {x: -0.18513912, y: 0.23071596, z: -1.657}
+  m_LocalRotation: {x: -1, y: -0, z: -0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.4640385}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4542947409830959828}
   - {fileID: 4542947410998991414}
   - {fileID: 4542947410486311504}
-  m_Father: {fileID: 4542947411012765465}
-  m_RootOrder: 2
+  m_Father: {fileID: 4542947411198699030}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -180, y: 0, z: 0}
 --- !u!198 &4542947410328526014
 ParticleSystem:
@@ -19675,15 +19675,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4542947410721907813}
-  m_LocalRotation: {x: -1, y: 0, z: 0, w: 0}
-  m_LocalPosition: {x: -0.18513912, y: 0.23071596, z: -1.2159615}
+  m_LocalRotation: {x: -1, y: -0, z: -0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.023000002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4542947411012638044}
   - {fileID: 4542947411877553251}
-  m_Father: {fileID: 4542947411012765465}
-  m_RootOrder: 1
+  m_Father: {fileID: 4542947411198699030}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -180, y: 0, z: 0}
 --- !u!198 &4542947410721907864
 ParticleSystem:
@@ -39245,7 +39245,6 @@ GameObject:
   - component: {fileID: 4542947411012765465}
   - component: {fileID: 4542947411012765467}
   - component: {fileID: 4542947411012765466}
-  - component: {fileID: 4542947411012765464}
   m_Layer: 0
   m_Name: BossAttack1
   m_TagString: Untagged
@@ -39261,13 +39260,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4542947411012765415}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.18513912, y: -0.23071596, z: 1.2159615}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4542947411198699030}
-  - {fileID: 4542947410721907814}
-  - {fileID: 4542947410328526012}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -39284,6 +39281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destoryEffect: {fileID: 3493024070138155006, guid: 02bfbaee199e47f42b57b827ab6566a7, type: 3}
+  healthInfo: {fileID: 11400000, guid: 7608e9fc740afbe488b6b6886e9933ee, type: 2}
 --- !u!54 &4542947411012765466
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -39300,19 +39298,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &4542947411012765464
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4542947411012765415}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 993c0db6d8238964a85bafb91fe72b7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  destoryEffect: {fileID: 3493024070138155006, guid: 02bfbaee199e47f42b57b827ab6566a7, type: 3}
 --- !u!1 &4542947411198699029
 GameObject:
   m_ObjectHideFlags: 0
@@ -39341,13 +39326,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4542947411198699029}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.18513912, y: 0.23071596, z: -1.1929615}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4542947411648390664}
   - {fileID: 4542947410928894991}
   - {fileID: 4542947410452170441}
+  - {fileID: 4542947410721907814}
+  - {fileID: 4542947410328526012}
   m_Father: {fileID: 4542947411012765465}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

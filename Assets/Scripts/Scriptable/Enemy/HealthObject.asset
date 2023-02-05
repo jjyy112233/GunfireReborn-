@@ -17,3 +17,8 @@ MonoBehaviour:
   defScale: 30
   maxDef: 50
   speed: 3.5
+  damage1: 50
+  damage2: 0
+  damage3: 0
+  damage4: 0
+  damage5: 0

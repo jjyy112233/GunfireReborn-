@@ -15,5 +15,10 @@ MonoBehaviour:
   maxHp: 500
   hpCnt: 1
   defScale: 30
-  maxDef: 100
+  maxDef: 300
   speed: 3.5
+  damage1: 50
+  damage2: 70
+  damage3: 3
+  damage4: 0
+  damage5: 0
