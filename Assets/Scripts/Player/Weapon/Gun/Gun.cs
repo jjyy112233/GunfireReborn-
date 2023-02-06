@@ -1,5 +1,5 @@
 #define Debug
-
+#define Debug
 using Newtonsoft.Json.Schema;
 using System.Collections;
 using System.Collections.Generic;
@@ -46,7 +46,7 @@ public class Gun : MonoBehaviour
     private void Update()
     {
         fireTimer += Time.deltaTime;
-#if Debug2
+#if Debug
         if (Input.GetMouseButton(0))
 #else
         if (playerInput.shot_joystick.isDown)
@@ -66,7 +66,7 @@ public class Gun : MonoBehaviour
             playerAnimator.SetTrigger("FireSingle");
 
             RaycastHit hit;
-            var ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+            var ray = new Ray(player.cam.transform.position, player.cam.transform.forward);
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, layer))
                 {
@@ -77,6 +77,7 @@ public class Gun : MonoBehaviour
                 var enemy = hit.transform.GetComponent<Enemy>();
                 if (enemy != null)
                 {
+                    Debug.Log(Damamge);
                     enemy.Hit(player, Damamge, hit.collider.transform.CompareTag("EnemyHead"));
                 }
 

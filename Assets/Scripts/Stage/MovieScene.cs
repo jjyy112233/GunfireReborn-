@@ -12,8 +12,8 @@ public class MovieScene : MonoBehaviour
 
     private void Awake()
     {
-        Instantiate(preCharactors[GameManager.instance.charactorIdx],
-            spawns[0].position, Quaternion.identity);
+        //Instantiate(preCharactors[GameManager.instance.charactorIdx],
+        //    spawns[0].position, Quaternion.identity);
     }
     public void NextScene()
     {

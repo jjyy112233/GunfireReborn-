@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -52,15 +53,36 @@ public class PlayerController : MonoBehaviour
 
     Dictionary<STATE, ObjectAction> allStates = new Dictionary<STATE, ObjectAction>();
 
-    int coin;
+    public TextMeshProUGUI coinTxt;
+    public int coin;
 
     Movement movement;
+    public Camera cam {
+        get {
+            return movement.camera;
+        }
+        set {
+            movement.camera = value;
+        }
+    }
 
     Image rollingDelay;
-    Image skillDelay;
 
+    public void Init()
+    {
+        stageManager = GameObject.FindObjectOfType<StageManager>();
+        stageManager.Reload.onClick.AddListener(movement.Reload);
+        stageManager.Jump.onClick.AddListener(movement.Jump);
+        stageManager.Rolling.onClick.AddListener(movement.Rolling);
+        rollingDelay = stageManager.RollingDelay;
+
+        healthInfo.SetHpBar(GameObject.FindGameObjectWithTag("PlayerHP").GetComponent<Image>());
+        healthInfo.SetDefBar(GameObject.FindGameObjectWithTag("PlayerDEF").GetComponent<Image>());
+        healthInfo.Init();
+    }
     private void Awake()
     {
+        DontDestroyOnLoad(gameObject);
         movement = new Movement(transform);
         allStates[STATE.Move] = movement;
         allStates[STATE.Victory] = new Victory(transform);
@@ -70,25 +92,19 @@ public class PlayerController : MonoBehaviour
         DJumpEnd = movement.JumpEnd;
         DRollingEnd = movement.RollingEnd;
 
-        stageManager = GameObject.FindObjectOfType<StageManager>();
-        stageManager.Reload.onClick.AddListener(movement.Reload);
-        stageManager.Jump.onClick.AddListener(movement.Jump);
-        stageManager.Rolling.onClick.AddListener(movement.Rolling);
-        rollingDelay = stageManager.Rolling.GetComponentInChildren<Image>();
-
-        healthInfo.SetHpBar(GameObject.FindGameObjectWithTag("PlayerHP").GetComponent<Image>());
-        healthInfo.SetDefBar(GameObject.FindGameObjectWithTag("PlayerDEF").GetComponent<Image>());
-        healthInfo.Init();
 
         FindGun();
     }
-    private void Start()
-    {
-    }
     private void FixedUpdate()
     {
-        rollingDelay.fillAmount = 1 - movement.RollingScale;
+        var rSacle = Mathf.Max(1 - movement.RollingScale, 0);
+        rollingDelay.fillAmount = rSacle;
         currentAction.MoveUpdate();
+
+        if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            GameObject.FindObjectOfType<StageManager>().SetUserInven();
+        }
     }
 
     public void JumpEnd() //Animaton Event
@@ -134,7 +150,8 @@ public class PlayerController : MonoBehaviour
 
     public void AddCoin(int g)
     {
-        coin += g;
+        coin += g * (level.IsScroll(Scroll.GoldMaster) ? 1 : 2);
+        coinTxt.text = coin.ToString();
     }
     public void AddFood(int h)
     {

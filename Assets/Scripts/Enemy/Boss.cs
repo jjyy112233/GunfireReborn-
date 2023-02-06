@@ -30,6 +30,7 @@ public class Boss : MonoBehaviour, BossInterface
     GameObject nowInvEffect;
 
     public Camera dieCamera;
+    public Potal clearPotal;
 
     public HealthObject healthInfo;
 
@@ -168,7 +169,7 @@ public class Boss : MonoBehaviour, BossInterface
                     pathFind.isStopped = true;
                     animator.SetTrigger("Aoe");
                     NowUpdate = AoeUpdate;
-                    break;
+                    break;  
                 case BossState.Invincible:
                     pathFind.isStopped = true;
                     animator.SetTrigger("Invincible");
@@ -176,6 +177,7 @@ public class Boss : MonoBehaviour, BossInterface
                     break;
                 case BossState.Die:
                     pathFind.enabled = false;
+                    clearPotal.gameObject.SetActive(true);
                     animator.SetTrigger("Die");
                     NowUpdate = DieUpdate;
                     break;

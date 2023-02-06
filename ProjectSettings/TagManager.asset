@@ -20,6 +20,7 @@ TagManager:
   - EnemyBody
   - RollingDelay
   - RollingButton
+  - PlayerCam
   layers:
   - Default
   - TransparentFX

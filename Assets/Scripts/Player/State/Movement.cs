@@ -6,6 +6,11 @@ using UnityEngine;
 public class Movement : ObjectAction 
 {
     float moveSpeed = 10f;
+    float MoveSpeed {
+        get {
+            return moveSpeed * playerController.level.SpeedLevel;
+        }
+    }
     bool isJump;
 
     float rollingDelay = 3f;    
@@ -18,11 +23,12 @@ public class Movement : ObjectAction
 
     Transform player;
     PlayerInput playerInput;
+    PlayerController playerController;
     Rigidbody playerRigidBody;
     Animator playerAnimator;
     SphereCollider rollingCol;
 
-    Camera camera;
+    public Camera camera;
 
     float aimSen = 2f;
     float rotateSpeed = 180f;
@@ -33,13 +39,16 @@ public class Movement : ObjectAction
 
     public Movement(Transform p)
     {
+#if Debug
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+#endif
         player = p;
         playerInput = p.GetComponent<PlayerInput>();
+        playerController = p.GetComponent<PlayerController>();
         playerRigidBody = p.GetComponent<Rigidbody>();
         playerAnimator = p.GetComponent<Animator>();
         rollingCol = player.GetComponent<SphereCollider>();
-        camera = Camera.main;
-
 
         playerAnimator.SetTrigger("Stage");
         rollingTimer = rollingDelay;
@@ -80,11 +89,11 @@ public class Movement : ObjectAction
 
     void Move()
     {
-        var forward = Camera.main.transform.forward;
+        var forward =camera.transform.forward;
         forward.y = 0f;
         forward.Normalize();
 
-        var side = Camera.main.transform.right;
+        var side = camera.transform.right;
         side.y = 0f;
         side.Normalize();
 
@@ -101,7 +110,7 @@ public class Movement : ObjectAction
         {
             dir.Normalize();
         }
-        var delta = dir * moveSpeed * Time.deltaTime;
+        var delta = dir * MoveSpeed * Time.deltaTime;
         delta.y = 0;
 
         playerRigidBody.AddForce(delta * 2000);
@@ -113,7 +122,8 @@ public class Movement : ObjectAction
     void LookJoystick()
     {
 
-#if Debug2
+#if Debug
+
         var ver = Input.GetAxis("Mouse Y");
         var hor = Input.GetAxis("Mouse X");
 #else
@@ -142,10 +152,13 @@ public class Movement : ObjectAction
 
     public void MoveUpdate()
     {
-        Move();
-        LookJoystick();
+        if (GameManager.instance.MapMove)
+        {
+            Move();
+            LookJoystick();
+        }
 
-        rollingTimer += Time.deltaTime;
+        rollingTimer += Time.deltaTime * (playerController.level.IsScroll(Scroll.RollingMaster) ? 2f : 1);
 
         if (isJump)
             playerAnimator.SetFloat("JumpVelocity", playerRigidBody.velocity.y);

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05966d02fedbfd14991c3e1aa3d66fde, type: 3}
   m_Name: HealtPlayer
   m_EditorClassIdentifier: 
-  maxHp: 100
-  hp: 20
+  maxHp: 200
+  hp: 200
   defScale: 50
   maxDef: 100
-  def: 0
+  def: 100
   speed: 0

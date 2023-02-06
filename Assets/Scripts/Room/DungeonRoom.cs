@@ -36,16 +36,6 @@ public class DungeonRoom : MonoBehaviour
         }
     }
 
-    void DeadBoss(Enemy enemy)
-    {
-        foreach(var now_enemy in enemies)
-        {
-            now_enemy.Die();
-        }
-        enemies.Clear();
-        ClearDungeon();
-        chest.Openable = true;
-    }
 
     private void FixedUpdate()
     {

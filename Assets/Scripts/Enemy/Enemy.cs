@@ -1,9 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using TMPro.EditorUtilities;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -27,7 +23,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
     SpriteRenderer hpBar;
     float HP {
         set {
-            hp = Mathf.Max(value, 0);
+            hp = Mathf.Clamp(value, 0, healthInfo.maxHp);
             hpBar.size = new Vector2(hp / healthInfo.maxHp, 1);
         }
     }
@@ -41,7 +37,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
     }
     float DEF {
         set {
-            def = value;
+            def = Mathf.Clamp(value, 0, healthInfo.maxDef);
             defBar.size = new Vector2(def / healthInfo.maxDef, 1);
         }
     }

@@ -22,7 +22,7 @@ public class ItemWeapon : Item
 
     public void OnMouseDown()
     {
-        var dis = Vector3.Distance(Camera.main.transform.position, transform.position);
+        var dis = Vector3.Distance(FindObjectOfType<StageManager>().mainCam.transform.position, transform.position);
         if (dis > 3)
             return;
         GameObject.FindObjectOfType<WeaponManager>().GetWeapon(data.code, lastAmmo);

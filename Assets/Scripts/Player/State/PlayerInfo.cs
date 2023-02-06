@@ -15,6 +15,8 @@ public class PlayerInfo : ScriptableObject
         get { return hp; }
         set {
             hp = value;
+            hp = Mathf.Clamp(hp, 0, maxHp);
+
             hpBar.fillAmount =hp / maxHp;
         }
     }
@@ -26,12 +28,14 @@ public class PlayerInfo : ScriptableObject
             return (100.0f - defScale) / 100.0f;
         }
     }
+
     public float maxDef;
     public float def;
 
     float DEF {
         set {
             def = value;
+            def = Mathf.Clamp(def, 0, maxDef);
             defBar.fillAmount = def / maxDef;
         }
     }
@@ -58,6 +62,7 @@ public class PlayerInfo : ScriptableObject
     public void Hit(float dmg)
     {
         float defDmg = dmg - dmg * defScalePer;
+        Debug.Log(defDmg);
         if (!isNonDef)
         {
             if (defDmg >= def)
@@ -74,6 +79,7 @@ public class PlayerInfo : ScriptableObject
             else
             {
                 DEF = def - defDmg;
+                Debug.Log(def - defDmg);
             }
         }
         else

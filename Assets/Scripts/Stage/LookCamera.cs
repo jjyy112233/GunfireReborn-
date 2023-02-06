@@ -8,9 +8,9 @@ public class LookCamera : MonoBehaviour
     public SpriteRenderer hpBar;
     public SpriteRenderer defBar;
 
-    private void Awake()
+    private void Start()
     {
-        cameraTr = Camera.main.transform;
+        cameraTr = FindObjectOfType<StageManager>().mainCam.transform;
     }
     private void Update()
     {
