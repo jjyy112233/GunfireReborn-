@@ -25,8 +25,29 @@ public class LobbyManager : MonoBehaviour
         mainCamera = Camera.main;
         camAnimator = mainCamera.GetComponent<Animator>();
         SetPlayer(0);
-    }
 
+        if(FindObjectOfType<StageManager>())
+            Destroy(FindObjectOfType<StageManager>().gameObject);
+        if (FindObjectOfType<ItemSpawnManager>())
+            Destroy(FindObjectOfType<ItemSpawnManager>().gameObject);
+        if (FindObjectOfType<WeaponManager>())
+            Destroy(FindObjectOfType<WeaponManager>().gameObject);
+
+    }
+    private void Start()
+    {
+        GameManager.instance.MouseLock(false);
+        var players = GameObject.FindObjectsOfType<PlayerController>();
+        
+        foreach(PlayerController player in players)
+        {
+            Destroy(player.gameObject);
+        }
+
+        var canvas = FindObjectOfType<DontDestroyCanvas>();
+        if(canvas)
+            Destroy(canvas.gameObject);
+    }
     [ContextMenu("CamMove")]
     public void SelectCharactor()
     {
@@ -61,6 +82,6 @@ public class LobbyManager : MonoBehaviour
     public void SetReady()
     {
         GameManager.instance.charactorIdx = charIdx;
-        SceneManager.LoadScene("stage1_map0");
+        GameManager.instance.LoadScene("stage1_map0");
     }
 }

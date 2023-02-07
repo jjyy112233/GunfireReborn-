@@ -32,6 +32,7 @@ public class Chest : MonoBehaviour
 
     private void Awake()
     {
+        chestUi = GameManager.FindObjectOfType<DontDestroyCanvas>().chestUi.GetComponent<Animator>();
         animator = GetComponent<Animator>();
         chestUics = chestUi.GetComponent<ChestUi>();
     }
@@ -70,7 +71,6 @@ public class Chest : MonoBehaviour
         for (int i = 0; i< 3; i++)
         {
             var idx = Random.Range(0, chestData.Length);
-            Debug.Log(idx);
             datas[i] = chestData[idx];
         }
     }

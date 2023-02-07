@@ -190,8 +190,14 @@ public class Boss : MonoBehaviour, BossInterface
 
     private void Awake()
     {
+        var c = GameObject.FindObjectOfType<DontDestroyCanvas>();
+        c.SetBossUi(true);
         animator = GetComponent<Animator>();
         pathFind = GetComponent<NavMeshAgent>();
+
+        defBar = c.bossUiDef;
+        hpBar = c.bossUiHp;
+
         InitHealth();
     }
     private void Start()
@@ -338,6 +344,7 @@ public class Boss : MonoBehaviour, BossInterface
 
     public void Die()
     {
+        GameObject.FindObjectOfType<DontDestroyCanvas>().SetBossUi(false);
         State = BossState.Die;
     }
 

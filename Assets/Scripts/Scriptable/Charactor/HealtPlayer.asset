@@ -15,6 +15,6 @@ MonoBehaviour:
   maxHp: 200
   hp: 200
   defScale: 50
-  maxDef: 100
-  def: 100
+  maxDef: 200
+  def: 200
   speed: 0

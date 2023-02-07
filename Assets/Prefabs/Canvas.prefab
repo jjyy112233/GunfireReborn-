@@ -678,7 +678,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC774\uB3D9\uC18D\uB3C4"
+  m_text: "\uC5F0\uC0AC\uB825"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7e1d5270bafdb244a954a995e5686c11, type: 2}
   m_sharedMaterial: {fileID: 5850684638985899850, guid: 7e1d5270bafdb244a954a995e5686c11, type: 2}
@@ -1175,6 +1175,7 @@ GameObject:
   - component: {fileID: 2746651847381164945}
   - component: {fileID: 2746651847381164946}
   - component: {fileID: 2746651847381164947}
+  - component: {fileID: -3168011280521841514}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1277,6 +1278,22 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &-3168011280521841514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2746651847381164940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9382abe3313096e4794bdfff481ece3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bossUi: {fileID: 2804639863241503275}
+  bossUiHp: {fileID: 1053831103607041963}
+  bossUiDef: {fileID: 7495021550649082937}
+  chestUi: {fileID: 2746651847918251382}
 --- !u!1 &2746651847422361887
 GameObject:
   m_ObjectHideFlags: 0
@@ -2433,7 +2450,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2746651847918251381
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5353,7 +5370,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8126319785234880745
 RectTransform:
   m_ObjectHideFlags: 0

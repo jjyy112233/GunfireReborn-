@@ -1,14 +1,15 @@
 using System;
 using System.Linq;
+using TMPro.EditorUtilities;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour, EnemyInterface
 {
-    NavMeshAgent pathFinder; // 경로계산 AI 에이전트
+    protected NavMeshAgent pathFinder; // 경로계산 AI 에이전트
 
-    Animator animator;
-    PlayerController target;
+    protected Animator animator;
+    protected PlayerController target;
 
     public HealthObject healthInfo;
 
@@ -18,9 +19,9 @@ public class Enemy : MonoBehaviour, EnemyInterface
     public float skillTimer;
     public float skillDis;
 
-    float damage;
+    protected float damage;
     public float hp;
-    SpriteRenderer hpBar;
+    protected SpriteRenderer hpBar;
     float HP {
         set {
             hp = Mathf.Clamp(value, 0, healthInfo.maxHp);
@@ -29,13 +30,13 @@ public class Enemy : MonoBehaviour, EnemyInterface
     }
 
     public float def;
-    SpriteRenderer defBar;
+    protected SpriteRenderer defBar;
     public float defScalePer {
         get {
             return healthInfo.defScale / 100.0f;
         }
     }
-    float DEF {
+    protected float DEF {
         set {
             def = Mathf.Clamp(value, 0, healthInfo.maxDef);
             defBar.size = new Vector2(def / healthInfo.maxDef, 1);
@@ -43,6 +44,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
     }
     public bool isNonDef => def <= 0;
     public bool isDie => hp <= 0;
+
 
     public enum EnemyState
     {
@@ -55,7 +57,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
         Die,
     }
 
-    EnemyState state;
+    protected EnemyState state;
     public EnemyState State {
         get {
             return state;
@@ -109,11 +111,13 @@ public class Enemy : MonoBehaviour, EnemyInterface
         }
     }
 
-    Action nowUpdate;
+    protected Action nowUpdate;
 
     //죽을때 템 드랍
-    Action OnDie;
-    Action<Enemy> OnDieRoom;
+    protected Action OnDie;
+    protected Action<Enemy> OnDieRoom;
+
+    public FireDamage fireDamage;
 
     private void Awake()
     {
@@ -128,7 +132,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
 
         OnDie += ItemSpawn;
     }
-    private void Update()
+    private void FixedUpdate()
     {
         skillTimer += Time.deltaTime;
         if (nowUpdate != null)
@@ -136,7 +140,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
 
     }
 
-    public void Die()
+    public virtual void Die()
     {
         var cols = GetComponentsInChildren<Collider>();
         foreach (var col in cols)
@@ -152,7 +156,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
         Destroy(gameObject, 1f);
     }
 
-    public void Hit(PlayerController nowTarget, float dmg, bool stop)
+    public virtual void Hit(PlayerController nowTarget, float dmg, bool stop)
     {
         Hit(dmg);
         if (target == null)
@@ -176,7 +180,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
         State = EnemyState.Move;
     }
 
-    void Targeting()
+    protected void Targeting()
     {
         var players = GameObject.FindGameObjectsWithTag("Player").Where(t => Vector3.Distance(transform.position, t.transform.position) <= findDis);
         if (players.Count() == 0)
@@ -196,7 +200,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
     {
         Targeting();
     }
-    void MoveUpdate()
+    public virtual void MoveUpdate()
     {
         pathFinder.SetDestination(target.transform.position);
         if(skillTimer >= skillDelay && Vector3.Distance(transform.position, target.transform.position) < skillDis)
@@ -213,7 +217,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
         pathFinder.SetDestination(target.transform.position);
     }
 
-    public void AttackOnDamage()
+    public virtual void AttackOnDamage()
     {
         var players = GameObject.FindGameObjectsWithTag("Player").Where(t => Vector3.Distance(t.transform.position, transform.position) < attackDis);
         foreach(var player in players)
@@ -222,7 +226,7 @@ public class Enemy : MonoBehaviour, EnemyInterface
         }
     }
 
-    public void AttackEnd()
+    public virtual void AttackEnd()
     {
         Targeting();
 
@@ -309,5 +313,10 @@ public class Enemy : MonoBehaviour, EnemyInterface
     public void AddDieEvent(Action<Enemy> dieEvent)
     {
         OnDieRoom += dieEvent;
+    }
+
+    public void BodyFire()
+    {
+        fireDamage.gameObject.SetActive(true);
     }
 }

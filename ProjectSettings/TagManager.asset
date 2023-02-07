@@ -21,6 +21,7 @@ TagManager:
   - RollingDelay
   - RollingButton
   - PlayerCam
+  - PlayerSpawn
   layers:
   - Default
   - TransparentFX

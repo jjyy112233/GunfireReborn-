@@ -79,6 +79,8 @@ public class Gun : MonoBehaviour
                 {
                     Debug.Log(Damamge);
                     enemy.Hit(player, Damamge, hit.collider.transform.CompareTag("EnemyHead"));
+                    if(player.level.IsScroll(Scroll.FireBullet))
+                        enemy.BodyFire();
                 }
 
                 var boss = hit.transform.GetComponent<Boss>();

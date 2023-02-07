@@ -12,11 +12,10 @@ public class MovieScene : MonoBehaviour
 
     private void Awake()
     {
-        //Instantiate(preCharactors[GameManager.instance.charactorIdx],
-        //    spawns[0].position, Quaternion.identity);
+        //GameObject.FindObjectOfType<DontDestroyCanvas>().gameObject.SetActive(false);
     }
     public void NextScene()
     {
-        SceneManager.LoadScene(nextScene);
+        GameManager.instance.LoadScene(nextScene);
     }
 }

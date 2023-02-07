@@ -10,9 +10,16 @@ public class Potal : MonoBehaviour
     {
         potarParticle = GetComponent<ParticleSystem>();
     }
+    public void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.KeypadEnter))
+            GameManager.instance.LoadScene(nextScene);
+
+    }
 
     private void OnMouseDown()
     {
-        SceneManager.LoadScene(nextScene);
+        Debug.Log(nextScene); ;
+        GameManager.instance.LoadScene(nextScene);
     }
 }

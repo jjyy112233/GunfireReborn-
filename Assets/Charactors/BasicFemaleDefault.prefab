@@ -1537,6 +1537,8 @@ MonoBehaviour:
   handL: {fileID: 6123953096598591693}
   healthInfo: {fileID: 11400000, guid: aaa66d2e577ef174f870a40d6b71053b, type: 2}
   level: {fileID: 2082732811793054066}
+  coinTxt: {fileID: 0}
+  coin: 0
 --- !u!136 &6210013206124725309
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1563,6 +1565,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 813d83f7e14b81c4f9dc8cf95fe8574e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dmgLevel: 100
+  fireLevel: 100
+  speedLevel: 100
+  myScroll: []
 --- !u!1 &6123953097802274437
 GameObject:
   m_ObjectHideFlags: 0

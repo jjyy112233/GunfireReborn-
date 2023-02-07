@@ -618,6 +618,7 @@ MonoBehaviour:
   skillDis: 9
   hp: 0
   def: 0
+  fireDamage: {fileID: 2139136099241423789}
 --- !u!1 &4121837594270425555
 GameObject:
   m_ObjectHideFlags: 0

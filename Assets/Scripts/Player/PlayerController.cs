@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
@@ -76,9 +77,6 @@ public class PlayerController : MonoBehaviour
         stageManager.Rolling.onClick.AddListener(movement.Rolling);
         rollingDelay = stageManager.RollingDelay;
 
-        healthInfo.SetHpBar(GameObject.FindGameObjectWithTag("PlayerHP").GetComponent<Image>());
-        healthInfo.SetDefBar(GameObject.FindGameObjectWithTag("PlayerDEF").GetComponent<Image>());
-        healthInfo.Init();
     }
     private void Awake()
     {
@@ -92,6 +90,9 @@ public class PlayerController : MonoBehaviour
         DJumpEnd = movement.JumpEnd;
         DRollingEnd = movement.RollingEnd;
 
+        healthInfo.SetHpBar(GameObject.FindGameObjectWithTag("PlayerHP").GetComponent<Image>());
+        healthInfo.SetDefBar(GameObject.FindGameObjectWithTag("PlayerDEF").GetComponent<Image>());
+        healthInfo.Init();
 
         FindGun();
     }
@@ -132,6 +133,10 @@ public class PlayerController : MonoBehaviour
     public void Hit(GameObject attackObj, float damage)
     {
         healthInfo.Hit(damage);
+        if(healthInfo.isDie)
+        {
+            GameManager.instance.LoadScene("Lobby");
+        }
     }
 
     void FindGun()
