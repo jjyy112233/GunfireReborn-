@@ -12,6 +12,8 @@ public class Movement : ObjectAction
         }
     }
     bool isJump;
+    public bool isReload;
+    public bool isRolling;
 
     float rollingDelay = 3f;    
     float rollingTimer = 0;
@@ -57,11 +59,14 @@ public class Movement : ObjectAction
 
     public void Rolling()
     {
+        if (isRolling)
+            return;
         if (rollingTimer < rollingDelay)
         {
             return;
         }
 
+        isRolling = true;
         rollingTimer = 0f;
         rollingCol.enabled = true;
         var hor = Mathf.Abs(playerInput.move_joystick.Horizontal);
@@ -84,6 +89,7 @@ public class Movement : ObjectAction
 
     public void RollingEnd()
     {
+        isRolling = false;
         rollingCol.enabled = false;
     }
 
@@ -181,7 +187,9 @@ public class Movement : ObjectAction
 
     public void Reload()
     {
-        Debug.Log("Reload");
+        if (isReload)
+            return;
+        isReload = true;
         playerAnimator.SetTrigger("Reload");
     }
 }

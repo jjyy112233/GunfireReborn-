@@ -58,7 +58,7 @@ public class Gun : MonoBehaviour
     }
     public void Fire() //일정시간마다 애니메이션 반복
     {
-        if (Ammo == 0)
+        if (Ammo == 0 || player.isReload || player.isRolling)
             return;
         if (fireTimer > Delay)
         {

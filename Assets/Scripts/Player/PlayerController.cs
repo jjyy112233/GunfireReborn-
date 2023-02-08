@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
     ActionDelegate DRollingEnd;
 
     StageManager stageManager;
-    STATE State {
+    public STATE State {
         set {
             switch(value)
             {
@@ -49,6 +49,9 @@ public class PlayerController : MonoBehaviour
                     currentAction = allStates[currentState];
                     break;
             }
+        }
+        get {
+            return currentState;
         }
     }
 
@@ -68,6 +71,9 @@ public class PlayerController : MonoBehaviour
     }
 
     Image rollingDelay;
+
+    public bool isReload => movement.isReload;
+    public bool isRolling => movement.isRolling;
 
     public void Init()
     {
@@ -127,6 +133,7 @@ public class PlayerController : MonoBehaviour
 
     public void ReloadEnd()
     {
+        movement.isReload = false;
         Debug.Log("ReloadEnd");
         gun.Reload();
     }

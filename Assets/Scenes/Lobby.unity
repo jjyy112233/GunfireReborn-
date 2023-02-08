@@ -4436,7 +4436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5f9931d3a5b1d5459cdd6180e635563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
+  stageManager: {fileID: 0}
   charactorIdx: 0
 --- !u!4 &2076305736
 Transform:

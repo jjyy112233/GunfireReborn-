@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using TMPro.EditorUtilities;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -99,11 +98,16 @@ public class Enemy : MonoBehaviour, EnemyInterface
                     break;
                 case EnemyState.Die:
                     pathFinder.isStopped = true;
-                    if(OnDie != null)
+                    Destroy(pathFinder);
+                    GetComponent<Rigidbody>().isKinematic = true;
+                    target = null;
+
+                    if (OnDie != null)
                         OnDie();
                     if (OnDieRoom != null)
                         OnDieRoom(this);
 
+                    nowUpdate = null;
                     animator.SetTrigger("Die");
                     break;
 
