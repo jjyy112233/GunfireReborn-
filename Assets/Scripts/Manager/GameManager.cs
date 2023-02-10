@@ -11,9 +11,10 @@ public class GameManager : MonoBehaviour
     public StageManager stageManager;
 
     public int charactorIdx;
+    bool isMove;
     public bool MapMove {
         get {
-            return !Cursor.visible;
+            return isMove;
         }
     }
 
@@ -30,6 +31,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("stageManager" + "init");
             if(string.Compare(scene.name, "Lobby") != 0)
                stageManager.Init();
+            
         }
     }
     private void OnDisable()
@@ -52,8 +54,12 @@ public class GameManager : MonoBehaviour
 
     public void MouseLock(bool state)
     {
+#if !UNITY_EDITOR
         Cursor.visible = !state;
         Cursor.lockState = state ? CursorLockMode.Locked : CursorLockMode.Confined;
+#endif
+
+        isMove = !state;
     }
 
 

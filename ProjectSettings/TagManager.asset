@@ -22,6 +22,7 @@ TagManager:
   - RollingButton
   - PlayerCam
   - PlayerSpawn
+  - DragZone
   layers:
   - Default
   - TransparentFX

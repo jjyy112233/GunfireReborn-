@@ -1,7 +1,9 @@
-#define Debug
-
 using System.Runtime.InteropServices;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Windows;
+using Input = UnityEngine.Input;
 
 public class Movement : ObjectAction 
 {
@@ -38,10 +40,12 @@ public class Movement : ObjectAction
     float camX = 0f;
     float camY = 0f;
 
+    Touch dragTouch;
+    DragZone dragZone;
 
     public Movement(Transform p)
     {
-#if Debug
+#if !UNITY_EDITOR
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 #endif
@@ -54,6 +58,8 @@ public class Movement : ObjectAction
 
         playerAnimator.SetTrigger("Stage");
         rollingTimer = rollingDelay;
+
+        dragZone = GameObject.FindWithTag("DragZone").GetComponent<DragZone>();
     }
 
 
@@ -103,15 +109,17 @@ public class Movement : ObjectAction
         side.y = 0f;
         side.Normalize();
 
-#if Debug
+#if UNITY_ANDROID
+        var dir = forward * playerInput.move_joystick.Vertical;
+            dir += side * playerInput.move_joystick.Horizontal;
+#else
         var moveV = Input.GetAxisRaw("Vertical");
         var moveH = Input.GetAxisRaw("Horizontal");
         var dir = forward * moveV;
         dir += side * moveH;
-#else
-            var dir = forward * playerInput.move_joystick.Vertical;
-            dir += side * playerInput.move_joystick.Horizontal;
 #endif
+
+
         if (dir.magnitude > 1)
         {
             dir.Normalize();
@@ -124,20 +132,57 @@ public class Movement : ObjectAction
         playerAnimator.SetFloat("Move", dir.magnitude);
     }
 
-    private float xRotate = 0.0f; // 내부 사용할 X축 회전량은 별도 정의 ( 카메라 위 아래 방향 )
+    private float Speed = 0.25f;
+
+    private Vector2 movePosDiff;
+    bool isDrag = false;
+
+
+    Vector2 LookDrag()
+    {
+        movePosDiff = Vector3.zero;
+
+        if (dragZone.isTouch)
+        {
+            Touch touch = dragZone.nowTouch;
+            {
+                movePosDiff = touch.deltaPosition * Time.deltaTime;
+            }
+        }
+        var hor = movePosDiff.x;
+        var ver = movePosDiff.y;
+
+        camX += ver;
+        camX = Mathf.Clamp(camX, -30, 30);
+        camY += hor;
+
+        camera.transform.localRotation = Quaternion.Euler(-camX, 0, 0);
+        playerAnimator.SetFloat("CamX", camX / 90);
+
+        player.transform.rotation = Quaternion.Euler(0, camY, 0);
+
+        if (camY > 360)
+            camY -= 360;
+        if (camY < -360)
+            camY += 360;
+
+        return movePosDiff;
+
+    }
+
     void LookJoystick()
     {
 
-#if Debug
-
-        var ver = Input.GetAxis("Mouse Y");
-        var hor = Input.GetAxis("Mouse X");
-#else
+#if UNITY_ANDROID
         if (!playerInput.shot_joystick.isDown)
             return;
 
         var ver = playerInput.shot_joystick.Vertical;
         var hor = playerInput.shot_joystick.Horizontal;
+#else
+
+        var ver = Input.GetAxis("Mouse Y");
+        var hor = Input.GetAxis("Mouse X");
         
 #endif
         camX += ver;
@@ -158,11 +203,19 @@ public class Movement : ObjectAction
 
     public void MoveUpdate()
     {
+#if UNITY_ANDROID
+        Move();
+        if (dragZone.isTouch)
+            LookDrag();
+        else
+            LookJoystick();
+#else
         if (GameManager.instance.MapMove)
         {
             Move();
             LookJoystick();
         }
+#endif
 
         rollingTimer += Time.deltaTime * (playerController.level.IsScroll(Scroll.RollingMaster) ? 2f : 1);
 

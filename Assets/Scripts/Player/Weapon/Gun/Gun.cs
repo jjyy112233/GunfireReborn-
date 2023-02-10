@@ -1,5 +1,3 @@
-#define Debug
-#define Debug
 using Newtonsoft.Json.Schema;
 using System.Collections;
 using System.Collections.Generic;
@@ -46,10 +44,10 @@ public class Gun : MonoBehaviour
     private void Update()
     {
         fireTimer += Time.deltaTime;
-#if Debug
+#if UNITY_ANDROID
+            if (playerInput.shot_joystick.isDown)
+#else 
         if (Input.GetMouseButton(0))
-#else
-        if (playerInput.shot_joystick.isDown)
 #endif
             Fire();
 
