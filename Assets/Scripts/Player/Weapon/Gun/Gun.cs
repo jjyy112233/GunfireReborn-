@@ -44,11 +44,11 @@ public class Gun : MonoBehaviour
     private void Update()
     {
         fireTimer += Time.deltaTime;
-#if UNITY_ANDROID
+//#if UNITY_ANDROID
             if (playerInput.shot_joystick.isDown)
-#else 
-        if (Input.GetMouseButton(0))
-#endif
+//#else 
+//        if (Input.GetMouseButton(0))
+//#endif
             Fire();
 
 

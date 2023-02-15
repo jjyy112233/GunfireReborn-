@@ -13,6 +13,8 @@ public class DungeonRoom : MonoBehaviour
     Collider roomCollider;
     public Potal potal;
 
+    bool firstTarget;
+
     private void Awake()
     {
         roomCollider = GetComponent<Collider>();
@@ -56,16 +58,20 @@ public class DungeonRoom : MonoBehaviour
                 Debug.Log("Find!");
                 roomCollider.enabled = false;
                 insertPlayer = true;
-                EnterPlayer();
+                EnterPlayer(playerCol.GetComponent<PlayerController>());
             }
         }
     }
 
-    public void EnterPlayer()
+    public void EnterPlayer(PlayerController t)
     {
         foreach(var door in doors)
         {
             door.Close();
+        }
+        foreach(var enemy in enemies)
+        {
+            enemy.Targeting(t);
         }
     }
 
@@ -85,5 +91,6 @@ public class DungeonRoom : MonoBehaviour
         Destroy(roomCollider);
         Destroy(this);
     }
+
 
 }

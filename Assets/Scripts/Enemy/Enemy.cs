@@ -199,7 +199,13 @@ public class Enemy : MonoBehaviour, EnemyInterface
             State = EnemyState.Move;
         }
     }
-        
+
+    public void Targeting(PlayerController t)
+    {
+        target = t;
+        State = EnemyState.Move;
+    }
+
     void IdleUpdate()
     {
         Targeting();
@@ -295,6 +301,12 @@ public class Enemy : MonoBehaviour, EnemyInterface
         else
         {
             HP = hp - dmg;
+        }
+
+        if (isDie)
+        {
+            Die();
+            return;
         }
     }
 

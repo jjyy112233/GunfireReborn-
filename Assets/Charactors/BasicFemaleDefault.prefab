@@ -1452,6 +1452,7 @@ Transform:
   - {fileID: 6123953097828026732}
   - {fileID: 6123953097052844907}
   - {fileID: 6123953095990338282}
+  - {fileID: 4481069122386152849}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1518,8 +1519,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   move_joystick: {fileID: 0}
   shot_joystick: {fileID: 0}
-  Horizontal: 0
-  Vertical: 0
 --- !u!114 &2355956426070049740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1537,6 +1536,7 @@ MonoBehaviour:
   handL: {fileID: 6123953096598591693}
   healthInfo: {fileID: 11400000, guid: aaa66d2e577ef174f870a40d6b71053b, type: 2}
   level: {fileID: 2082732811793054066}
+  mainCamPos: {fileID: 4481069122386152849}
   coinTxt: {fileID: 0}
   coin: 0
 --- !u!136 &6210013206124725309
@@ -1959,6 +1959,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9217328031787757500}
   - component: {fileID: 1104611290464393346}
+  - component: {fileID: 3679943025867778775}
   m_Layer: 12
   m_Name: CrashZone
   m_TagString: Body
@@ -1995,3 +1996,47 @@ CapsuleCollider:
   m_Height: 1.030285
   m_Direction: 1
   m_Center: {x: 0, y: 0.5228575, z: 0.001842022}
+--- !u!65 &3679943025867778775
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8099018147134926933}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 0.63647455, y: 1.0184526, z: 0.63020694}
+  m_Center: {x: -0.0062676966, y: 0.51109886, z: 0.0031338185}
+--- !u!1 &8219158172859353678
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4481069122386152849}
+  m_Layer: 0
+  m_Name: MainCamPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4481069122386152849
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8219158172859353678}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6123953097733565423}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

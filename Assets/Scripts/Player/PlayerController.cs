@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -12,6 +13,7 @@ public class PlayerController : MonoBehaviour
 
     public PlayerInfo healthInfo;
     public Level level;
+    public Transform mainCamPos;
 
     public enum STATE
     {
@@ -75,19 +77,13 @@ public class PlayerController : MonoBehaviour
     public bool isReload => movement.isReload;
     public bool isRolling => movement.isRolling;
 
-    public void Init()
-    {
-        stageManager = GameObject.FindObjectOfType<StageManager>();
-        stageManager.Reload.onClick.AddListener(movement.Reload);
-        stageManager.Jump.onClick.AddListener(movement.Jump);
-        stageManager.Rolling.onClick.AddListener(movement.Rolling);
-        rollingDelay = stageManager.RollingDelay;
+    public Action<Vector3> drageMath;
 
-    }
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(this);
         movement = new Movement(transform);
+        drageMath = movement.LookDrag;
         allStates[STATE.Move] = movement;
         allStates[STATE.Victory] = new Victory(transform);
         allStates[STATE.Die] = new Die(transform);
@@ -101,6 +97,13 @@ public class PlayerController : MonoBehaviour
         healthInfo.Init();
 
         FindGun();
+
+        stageManager = GameObject.FindObjectOfType<StageManager>();
+        stageManager.Reload.onClick.AddListener(movement.Reload);
+        stageManager.Jump.onClick.AddListener(movement.Jump);
+        stageManager.Rolling.onClick.AddListener(movement.Rolling);
+        stageManager.Inven.onClick.AddListener(SetInven);
+        rollingDelay = stageManager.RollingDelay;
     }
     private void FixedUpdate()
     {
@@ -110,8 +113,12 @@ public class PlayerController : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Tab))
         {
-            GameObject.FindObjectOfType<StageManager>().SetUserInven();
+            SetInven();
         }
+    }
+    public void SetInven()
+    { 
+            GameObject.FindObjectOfType<StageManager>().SetUserInven();
     }
 
     public void JumpEnd() //Animaton Event

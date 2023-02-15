@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: DefaultGun
   m_EditorClassIdentifier: 
   code: GUN000
-  dmg: 3000
+  dmg: 200
   ran: 1000
   speed: 0
-  delay: 1
+  delay: 0.7
   aim: 10
-  reloadAmmo: 10
+  reloadAmmo: 50
   useAmmo: 1
   aimPoint: 
   type: -1

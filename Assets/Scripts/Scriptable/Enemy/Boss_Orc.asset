@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a144eb64fcc5d3542b8585264668cb4f, type: 3}
   m_Name: Boss_Orc
   m_EditorClassIdentifier: 
-  maxHp: 500
+  maxHp: 2000
   hpCnt: 1
   defScale: 30
-  maxDef: 300
+  maxDef: 1000
   speed: 3.5
-  damage1: 50
-  damage2: 70
-  damage3: 3
+  damage1: 100
+  damage2: 120
+  damage3: 7
   damage4: 0
   damage5: 0

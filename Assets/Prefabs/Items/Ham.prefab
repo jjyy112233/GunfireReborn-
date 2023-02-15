@@ -247,7 +247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 2
   isMove: 1
-  health: 50
+  health: 200
 --- !u!1 &4949115971007377506
 GameObject:
   m_ObjectHideFlags: 0

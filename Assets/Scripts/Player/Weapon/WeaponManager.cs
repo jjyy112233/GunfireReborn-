@@ -21,7 +21,7 @@ public class WeaponManager : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(this);
         weapons["GUN000"] = weaponPrefabs[0];
         weapons["GUN001"] = weaponPrefabs[1];
         weapons["GUN002"] = weaponPrefabs[2];

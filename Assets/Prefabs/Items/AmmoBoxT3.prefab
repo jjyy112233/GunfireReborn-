@@ -80,7 +80,7 @@ MonoBehaviour:
   itemType: 0
   isMove: 1
   weaponType: 2
-  count: 10
+  count: 100
 --- !u!1 &9131075643009338214
 GameObject:
   m_ObjectHideFlags: 0

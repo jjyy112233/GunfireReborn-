@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -32,6 +33,7 @@ public class LobbyManager : MonoBehaviour
             Destroy(FindObjectOfType<ItemSpawnManager>().gameObject);
         if (FindObjectOfType<WeaponManager>())
             Destroy(FindObjectOfType<WeaponManager>().gameObject);
+
 
     }
     private void Start()
@@ -82,6 +84,7 @@ public class LobbyManager : MonoBehaviour
     public void SetReady()
     {
         GameManager.instance.charactorIdx = charIdx;
+        //GameManager.instance.LoadScene("stage1_map0");
         GameManager.instance.LoadScene("stage1_map0");
     }
 }

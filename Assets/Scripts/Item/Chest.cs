@@ -44,7 +44,7 @@ public class Chest : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (GameManager.instance.MapMove)
+       // if (GameManager.instance.MapMove)
         {
             if (openable)
             {

@@ -47,7 +47,7 @@ public class ItemSpawnManager : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(this);
         allItems[ItemType.Ammo] = ammo;
         allItems[ItemType.Coin] = money;
         allItems[ItemType.Food] = food;

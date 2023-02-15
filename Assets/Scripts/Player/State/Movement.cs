@@ -45,10 +45,10 @@ public class Movement : ObjectAction
 
     public Movement(Transform p)
     {
-#if !UNITY_EDITOR
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-#endif
+//#if !UNITY_EDITOR
+//        Cursor.visible = false;
+//        Cursor.lockState = CursorLockMode.Locked;
+//#endif
         player = p;
         playerInput = p.GetComponent<PlayerInput>();
         playerController = p.GetComponent<PlayerController>();
@@ -109,15 +109,15 @@ public class Movement : ObjectAction
         side.y = 0f;
         side.Normalize();
 
-#if UNITY_ANDROID
+//#if UNITY_ANDROID
         var dir = forward * playerInput.move_joystick.Vertical;
             dir += side * playerInput.move_joystick.Horizontal;
-#else
-        var moveV = Input.GetAxisRaw("Vertical");
-        var moveH = Input.GetAxisRaw("Horizontal");
-        var dir = forward * moveV;
-        dir += side * moveH;
-#endif
+//#else
+//        var moveV = Input.GetAxisRaw("Vertical");
+//        var moveH = Input.GetAxisRaw("Horizontal");
+//        var dir = forward * moveV;
+//        dir += side * moveH;
+//#endif
 
 
         if (dir.magnitude > 1)
@@ -138,16 +138,13 @@ public class Movement : ObjectAction
     bool isDrag = false;
 
 
-    Vector2 LookDrag()
+    public void LookDrag(Vector3 position)
     {
         movePosDiff = Vector3.zero;
 
         if (dragZone.isTouch)
         {
-            Touch touch = dragZone.nowTouch;
-            {
-                movePosDiff = touch.deltaPosition * Time.deltaTime;
-            }
+            movePosDiff = position * Time.deltaTime;
         }
         var hor = movePosDiff.x;
         var ver = movePosDiff.y;
@@ -165,26 +162,23 @@ public class Movement : ObjectAction
             camY -= 360;
         if (camY < -360)
             camY += 360;
-
-        return movePosDiff;
-
     }
 
     void LookJoystick()
     {
 
-#if UNITY_ANDROID
+//#if UNITY_ANDROID
         if (!playerInput.shot_joystick.isDown)
             return;
 
         var ver = playerInput.shot_joystick.Vertical;
         var hor = playerInput.shot_joystick.Horizontal;
-#else
+//#else
 
-        var ver = Input.GetAxis("Mouse Y");
-        var hor = Input.GetAxis("Mouse X");
+//        var ver = Input.GetAxis("Mouse Y");
+//        var hor = Input.GetAxis("Mouse X");
         
-#endif
+//#endif
         camX += ver;
         camX = Mathf.Clamp(camX, -30, 30);
 
@@ -203,19 +197,18 @@ public class Movement : ObjectAction
 
     public void MoveUpdate()
     {
-#if UNITY_ANDROID
+        //#if UNITY_ANDROID
         Move();
-        if (dragZone.isTouch)
-            LookDrag();
-        else
+        if (!dragZone.isTouch)
             LookJoystick();
-#else
-        if (GameManager.instance.MapMove)
-        {
-            Move();
-            LookJoystick();
-        }
-#endif
+
+        //#else
+        //        if (GameManager.instance.MapMove)
+        //        {
+        //            Move();
+        //            LookJoystick();
+        //        }
+        //#endif
 
         rollingTimer += Time.deltaTime * (playerController.level.IsScroll(Scroll.RollingMaster) ? 2f : 1);
 

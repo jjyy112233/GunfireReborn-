@@ -15,6 +15,10 @@ public class DebugUi : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode))
         {
+            if(KeyCode == KeyCode.Tab)
+            {
+                Debug.Log("TEST");
+            }
             btn.onClick.Invoke();
         }
     }
