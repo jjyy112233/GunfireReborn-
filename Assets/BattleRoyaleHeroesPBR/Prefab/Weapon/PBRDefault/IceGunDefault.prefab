@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1545150094688118226}
   - component: {fileID: 1545150094691509746}
   - component: {fileID: 1545150094690412338}
-  - component: {fileID: 1428881696966576361}
   - component: {fileID: 4156545305879464608}
   m_Layer: 0
   m_Name: IceGunDefault
@@ -85,27 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1428881696966576361
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1545150094688156146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09c67c87262f2e248b292ae0a4e77a76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pivot: {fileID: 0}
-  fireParticle: {fileID: 1336949550903370, guid: 4543ab5e3d405ec40a8d4e9aa5165030, type: 3}
-  damage: 0
-  fireTimer: 0
-  shotDelay: 0
-  speed: 0
-  ammo: 0
-  playerInput: {fileID: 0}
-  playerAnimator: {fileID: 0}
 --- !u!114 &4156545305879464608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,10 +98,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pivot: {fileID: 0}
   fireParticle: {fileID: 0}
-  damage: 0
-  fireTimer: 0
-  shotDelay: 0
-  speed: 0
+  weaponButton: {fileID: 0}
+  data: {fileID: 0}
+  layer:
+    serializedVersion: 2
+    m_Bits: 0
   ammo: 0
-  playerInput: {fileID: 0}
-  playerAnimator: {fileID: 0}

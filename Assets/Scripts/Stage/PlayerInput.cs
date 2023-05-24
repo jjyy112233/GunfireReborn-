@@ -7,11 +7,6 @@ public class PlayerInput : MonoBehaviour
     public VariableJoystick move_joystick;
     public VariableJoystick shot_joystick;
 
-    [SerializeField]
-    float Horizontal;
-    [SerializeField]
-    float Vertical;
-
     public bool fire { get; set; }
 
     private void Awake()

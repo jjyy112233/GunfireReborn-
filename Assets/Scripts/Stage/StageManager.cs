@@ -1,33 +1,94 @@
+using System.ComponentModel;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
-    public Transform[] spawns;
+    GameObject[] spawns;
     public GameObject[] preCharactors;
-    GameObject myCharactor;
+    PlayerController myCharactor;
 
+    public Canvas canvas;
     public Button Reload;
     public Button Skil;
     public Button Jump;
     public Button Rolling;
+    public Button Inven;
+    public Image RollingDelay;
     public Button throwAttack;
-    public Joystick leftJoystick;
-    public Joystick rightJoystick;
+    public DragZone dragZone;
+    public TextMeshProUGUI coin;
 
-    Camera mainCam;
+    public UserInfo userState;
+
+    public Camera mainCam;
+    public bool readyStage = false;
+
+    public GameObject exit;
+
+    public void Init()
+    {
+        Debug.Log("Stage Init");
+        spawns = GameObject.FindGameObjectsWithTag("PlayerSpawn");
+
+        myCharactor.transform.position = spawns[0].transform.position;
+        myCharactor.transform.rotation = spawns[0].transform.rotation;
+
+        Debug.Log(spawns[0].name);
+
+        if (Camera.main != null)
+        {
+            Debug.Log("Destroy camera");
+            Destroy(Camera.main.gameObject);
+        }
+        else
+        {
+            Debug.Log("NOT Destroy camera");
+        }
+    }
 
     private void Awake()
     {
-        myCharactor = Instantiate(preCharactors[GameManager.instance.charactorIdx],
-            spawns[0].position, Quaternion.identity);
-        mainCam = Camera.main;
+        Cursor.lockState = CursorLockMode.None;
+        DontDestroyOnLoad(this);
+        GameManager.instance.stageManager = this;
+        spawns = GameObject.FindGameObjectsWithTag("PlayerSpawn");
 
-    }
-    void Start()
-    {
-        mainCam.transform.parent = myCharactor.transform;
+        myCharactor = Instantiate(preCharactors[GameManager.instance.charactorIdx],
+            spawns[0].transform.position, Quaternion.identity).GetComponent<PlayerController>();
+
+        mainCam = Camera.main;
+        canvas.worldCamera = mainCam;
+
+        mainCam.transform.parent = myCharactor.mainCamPos;
         mainCam.transform.rotation = myCharactor.transform.rotation;
         mainCam.transform.localPosition = new Vector3(0, 1.1f, 0);
+
+        myCharactor.cam = mainCam;
+        mainCam.tag = "PlayerCam";
+
+        myCharactor.coinTxt = coin;
+        coin.text = myCharactor.coin.ToString();
+        userState.Dmg = myCharactor.level.DmgLevel;
+        userState.Speed = myCharactor.level.SpeedLevel;
+        userState.Fire = myCharactor.level.FireLevel;
+        userState.SetSclolls(myCharactor.level.myScroll);
+        dragZone.player = myCharactor;
+    }
+
+    public void SetUserInven()
+    {
+        userState.gameObject.SetActive(true);
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            exit.SetActive(true);
+        }
     }
 }

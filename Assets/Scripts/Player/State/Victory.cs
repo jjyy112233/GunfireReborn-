@@ -14,7 +14,7 @@ public class Victory : ObjectAction
         playerAnimator = p.GetComponent<Animator>();
         camera = Camera.main;
     }
-    public void Update()
+    public void MoveUpdate()
     {
 
     }

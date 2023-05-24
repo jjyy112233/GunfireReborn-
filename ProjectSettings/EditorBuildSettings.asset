@@ -17,4 +17,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/STAGE1/stage1_map2.unity
     guid: 5f149c99bfd59ad43bc5fb1a243bb776
+  - enabled: 1
+    path: Assets/Scenes/STAGE1/stage1_boss_movie.unity
+    guid: 67b396af3b3635449929e0a444583e3b
+  - enabled: 1
+    path: Assets/Scenes/STAGE1/stage1_boss.unity
+    guid: d9f6a732bcde5a14da1037c63e808bba
   m_configObjects: {}

@@ -12,8 +12,11 @@ public class PlayerInfo : ScriptableObject
     public float hp;
 
     float HP {
+        get { return hp; }
         set {
             hp = value;
+            hp = Mathf.Clamp(hp, 0, maxHp);
+
             hpBar.fillAmount =hp / maxHp;
         }
     }
@@ -25,12 +28,14 @@ public class PlayerInfo : ScriptableObject
             return (100.0f - defScale) / 100.0f;
         }
     }
+
     public float maxDef;
     public float def;
 
     float DEF {
         set {
             def = value;
+            def = Mathf.Clamp(def, 0, maxDef);
             defBar.fillAmount = def / maxDef;
         }
     }
@@ -40,11 +45,6 @@ public class PlayerInfo : ScriptableObject
 
     public bool isNonDef => def <= 0;
     public bool isDie => hp <= 0;
-
-    public int[] maxAmmo;
-    public int[] ammo;
-    TextMeshProUGUI[] ammoTxts;
-    string ammoFormat = @"{0} / {1}";
 
     public void Init()
     {
@@ -59,14 +59,10 @@ public class PlayerInfo : ScriptableObject
     {
         defBar = sprite;
     }
-    public void SetAmmoText(TextMeshProUGUI[] ammoTxts)
-    {
-        this.ammoTxts = ammoTxts;
-    }
-
     public void Hit(float dmg)
     {
         float defDmg = dmg - dmg * defScalePer;
+        Debug.Log(defDmg);
         if (!isNonDef)
         {
             if (defDmg >= def)
@@ -83,6 +79,7 @@ public class PlayerInfo : ScriptableObject
             else
             {
                 DEF = def - defDmg;
+                Debug.Log(def - defDmg);
             }
         }
         else
@@ -90,27 +87,8 @@ public class PlayerInfo : ScriptableObject
             HP = hp - dmg;
         }
     }
-
-    public void ReloadAmmo(int reloadCnt, int type, int idx)
+    public void AddHp(float heal)
     {
-        var t_maxAmmo = maxAmmo[type];
-        var t_ammo = ammo[type];
-        var needAmmo = reloadCnt - t_ammo;
-
-        if (t_maxAmmo == 0)
-            return;
-
-        if(t_maxAmmo >= needAmmo)
-        {
-            maxAmmo[type] -= needAmmo;
-            ammo[type] += needAmmo;
-        }
-        else
-        {
-            ammo[type] += maxAmmo[type];
-            maxAmmo[type] = 0;
-        }
-
-        ammoTxts[idx].text = string.Format(ammoFormat, ammo[type], maxAmmo[type]);
+        HP = Mathf.Min(HP + heal, maxHp);
     }
 }

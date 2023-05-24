@@ -12,7 +12,7 @@ public class Die : ObjectAction
         player = p;
         playerAnimator = p.GetComponent<Animator>();
     }
-    public void Update()
+    public void MoveUpdate()
     {
 
     }

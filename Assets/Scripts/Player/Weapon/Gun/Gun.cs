@@ -1,49 +1,73 @@
+using Newtonsoft.Json.Schema;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Analytics;
 
 public class Gun : MonoBehaviour
 {
     public Transform pivot;
     public GameObject fireParticle;
+    public WeaponButton weaponButton;
 
-    //스크립터블로 만들기
-    public float fireTimer = 0;
+    float fireTimer = 0;
     public WeaponData data;
 
-    public delegate void PlayerAnimation();
-    public PlayerAnimation SingleFireAnimation;
+    PlayerController player;
+    PlayerInput playerInput;
+    Animator playerAnimator;
+    WeaponManager weaponManager;
 
-    public PlayerController player;
-    public PlayerInput playerInput;
-    public Animator playerAnimator;
+    public LayerMask layer;
 
+    float Delay { get { return data.delay * player.level.FireLevel; } }
+    float Damamge { get { return data.dmg * player.level.DmgLevel; } }
+
+    [SerializeField]
+    int ammo;
+    public int Ammo {
+        get { return ammo; }
+        set {
+            ammo = value;
+            weaponManager.SetAmmo(ammo);
+        }
+    }
+    private void Awake()
+    {
+        weaponManager = FindObjectOfType<WeaponManager>();
+    }
     private void Start()
     {
         player = gameObject.GetComponentInParent<PlayerController>();
         playerInput = gameObject.GetComponentInParent<PlayerInput>();
-        playerAnimator = playerInput.transform.GetComponent<Animator>();    
+        playerAnimator = playerInput.transform.GetComponent<Animator>();
     }
     private void Update()
     {
         fireTimer += Time.deltaTime;
-        if (playerInput.shot_joystick.isDown)
+//#if UNITY_ANDROID
+            if (playerInput.shot_joystick.isDown)
+//#else 
+//        if (Input.GetMouseButton(0))
+//#endif
             Fire();
+
+
+        // Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.localPosition + Camera.main.transform.forward * 1000);
     }
     public void Fire() //일정시간마다 애니메이션 반복
     {
-        if (fireTimer > data.delay)
+        if (Ammo == 0 || player.isReload || player.isRolling)
+            return;
+        if (fireTimer > Delay)
         {
             fireTimer = 0f;
             playerAnimator.SetTrigger("FireSingle");
 
             RaycastHit hit;
-            Vector3 hitPos = Vector3.zero;
-            var ray = new Ray(pivot.position, Camera.main.transform.forward);
+            var ray = new Ray(player.cam.transform.position, player.cam.transform.forward);
 
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-            {
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layer))
+                {
                 var forward = hit.point - transform.position;
                 forward.y = 0;
                 forward.Normalize();
@@ -51,15 +75,42 @@ public class Gun : MonoBehaviour
                 var enemy = hit.transform.GetComponent<Enemy>();
                 if (enemy != null)
                 {
-                    enemy.Hit(player, data.dmg, hit.collider.transform.CompareTag("EnemyHead"));
-                    Debug.Log(hit.collider.name);
+                    Debug.Log(Damamge);
+                    enemy.Hit(player, Damamge, hit.collider.transform.CompareTag("EnemyHead"));
+                    if(player.level.IsScroll(Scroll.FireBullet))
+                        enemy.BodyFire();
+                }
+
+                var boss = hit.transform.GetComponent<Boss>();
+                if(boss != null)
+                {
+                    boss.Hit(Damamge * (hit.collider.transform.CompareTag("EnemyHead") ? 2f : 1f));
+                    Debug.Log(hit.collider.transform.tag);
+                }
+
+                var hitDesObj = hit.collider.transform.GetComponent<HitDestory>();
+                if (hitDesObj != null)
+                {
+                    hitDesObj.OnHit();
+                    Debug.Log(hit.collider.transform.tag);
                 }
             }
         }
     }
+
     public void FireBullet()
     {
         //Debug.Log("Test: " + Time.time);
         Instantiate(fireParticle, pivot.position, transform.rotation);
+
+        Ammo -= data.useAmmo;
+        weaponManager.SetAmmo(Ammo);
+    }
+    public void Reload()
+    {
+        if(!weaponButton.isDefault)
+            weaponManager.UseMyAmmo(data.type, data.reloadAmmo - Ammo);
+        Ammo = data.reloadAmmo;
+        weaponManager.SetAmmo(Ammo);
     }
 }

@@ -1,16 +1,19 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     public Gun gun;
-    public Dictionary<string, Gun> guns = new Dictionary<string, Gun>();
     public Transform handR;
     public Transform handL;
 
     public PlayerInfo healthInfo;
+    public Level level;
+    public Transform mainCamPos;
 
     public enum STATE
     {
@@ -31,7 +34,7 @@ public class PlayerController : MonoBehaviour
     ActionDelegate DRollingEnd;
 
     StageManager stageManager;
-    STATE State {
+    public STATE State {
         set {
             switch(value)
             {
@@ -49,13 +52,38 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
+        get {
+            return currentState;
+        }
     }
 
     Dictionary<STATE, ObjectAction> allStates = new Dictionary<STATE, ObjectAction>();
 
+    public TextMeshProUGUI coinTxt;
+    public int coin;
+
+    Movement movement;
+    public Camera cam {
+        get {
+            return movement.camera;
+        }
+        set {
+            movement.camera = value;
+        }
+    }
+
+    Image rollingDelay;
+
+    public bool isReload => movement.isReload;
+    public bool isRolling => movement.isRolling;
+
+    public Action<Vector3> drageMath;
+
     private void Awake()
     {
-        var movement = new Movement(transform);
+        DontDestroyOnLoad(this);
+        movement = new Movement(transform);
+        drageMath = movement.LookDrag;
         allStates[STATE.Move] = movement;
         allStates[STATE.Victory] = new Victory(transform);
         allStates[STATE.Die] = new Die(transform);
@@ -64,22 +92,33 @@ public class PlayerController : MonoBehaviour
         DJumpEnd = movement.JumpEnd;
         DRollingEnd = movement.RollingEnd;
 
+        healthInfo.SetHpBar(GameObject.FindGameObjectWithTag("PlayerHP").GetComponent<Image>());
+        healthInfo.SetDefBar(GameObject.FindGameObjectWithTag("PlayerDEF").GetComponent<Image>());
+        healthInfo.Init();
+
+        FindGun();
+
         stageManager = GameObject.FindObjectOfType<StageManager>();
         stageManager.Reload.onClick.AddListener(movement.Reload);
         stageManager.Jump.onClick.AddListener(movement.Jump);
         stageManager.Rolling.onClick.AddListener(movement.Rolling);
-
-        healthInfo.SetHpBar(GameObject.FindGameObjectWithTag("PlayerHP").GetComponent<Image>());
-        healthInfo.SetDefBar(GameObject.FindGameObjectWithTag("PlayerDEF").GetComponent<Image>());
-
-        healthInfo.Init();
-
-        FindGun();
+        stageManager.Inven.onClick.AddListener(SetInven);
+        rollingDelay = stageManager.RollingDelay;
     }
-
-    private void Update()
+    private void FixedUpdate()
     {
-        currentAction.Update();
+        var rSacle = Mathf.Max(1 - movement.RollingScale, 0);
+        rollingDelay.fillAmount = rSacle;
+        currentAction.MoveUpdate();
+
+        if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            SetInven();
+        }
+    }
+    public void SetInven()
+    { 
+            GameObject.FindObjectOfType<StageManager>().SetUserInven();
     }
 
     public void JumpEnd() //Animaton Event
@@ -101,11 +140,17 @@ public class PlayerController : MonoBehaviour
 
     public void ReloadEnd()
     {
+        movement.isReload = false;
         Debug.Log("ReloadEnd");
+        gun.Reload();
     }
     public void Hit(GameObject attackObj, float damage)
     {
         healthInfo.Hit(damage);
+        if(healthInfo.isDie)
+        {
+            GameManager.instance.LoadScene("Lobby");
+        }
     }
 
     void FindGun()
@@ -120,5 +165,15 @@ public class PlayerController : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void AddCoin(int g)
+    {
+        coin += g * (level.IsScroll(Scroll.GoldMaster) ? 1 : 2);
+        coinTxt.text = coin.ToString();
+    }
+    public void AddFood(int h)
+    {
+        healthInfo.AddHp(h);
     }
 }
