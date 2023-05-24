@@ -121,10 +121,10 @@ public class Boss : MonoBehaviour, BossInterface
     {
         Move,
         Attack, //휘두르기 
-        Attack2, //휘두르기 
+        Attack2, //내려찍기 
         Attack3, //회전
         Aoe, //샤우팅
-        Invincible,
+        Invincible, //무적
         Die,
 
     }
